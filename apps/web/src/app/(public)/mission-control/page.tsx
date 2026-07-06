@@ -15,108 +15,142 @@ export default function PublicMissionControlPage() {
   const projects = getProjects();
   const posts = getBlogPosts();
 
-  // Attempt to load real Git commits and heatmap data from all local repositories
+  // Attempt to load real Git commits and heatmap data from all local repositories (with 5-minute file caching)
   let commitsList: { hash: string; subject: string; author: string; date: string; project: string }[] = [];
   let totalCommits = 0;
   let heatmapCells: number[] = [];
   let gitEnabled = false;
-  const dateCounts: Record<string, number> = {};
 
-  try {
-    const baseProjectsDir = 'C:\\Users\\praka\\my-github-projects';
-    if (fs.existsSync(baseProjectsDir)) {
-      const dirs = fs.readdirSync(baseProjectsDir);
-      const allCommits: { hash: string; subject: string; author: string; date: string; timestamp: number; project: string }[] = [];
+  const cacheFile = path.join(process.cwd(), '.telemetry_cache.json');
+  let cacheValid = false;
 
-      for (const dir of dirs) {
-        const projPath = path.join(baseProjectsDir, dir);
-        if (!fs.statSync(projPath).isDirectory()) continue;
-
-        const gitDir = path.join(projPath, '.git');
-        if (fs.existsSync(gitDir)) {
-          try {
-            // Get commits from this directory
-            const gitLog = execSync('git log -n 10 --pretty=format:"%h|%s|%an|%ad|%at" --date=short', { 
-              cwd: projPath, 
-              encoding: 'utf-8',
-              stdio: ['pipe', 'pipe', 'ignore']
-            });
-
-            gitLog.split('\n').filter(Boolean).forEach(line => {
-              const [hash, subject, author, date, timestampStr] = line.split('|');
-              const timestamp = parseInt(timestampStr, 10) || 0;
-              allCommits.push({
-                hash,
-                subject: subject || 'No commit message',
-                author: author || 'Unknown',
-                date: date || '',
-                timestamp,
-                project: dir
-              });
-            });
-
-            // Count all commits for heatmap
-            const gitDates = execSync('git log --pretty=format:"%ad" --date=short', { 
-              cwd: projPath, 
-              encoding: 'utf-8',
-              stdio: ['pipe', 'pipe', 'ignore']
-            });
-            gitDates.split('\n').filter(Boolean).forEach(date => {
-              dateCounts[date] = (dateCounts[date] || 0) + 1;
-              totalCommits++;
-            });
-            gitEnabled = true;
-          } catch (e) {
-            // Skip this folder if git fails
-          }
-        }
+  if (fs.existsSync(cacheFile)) {
+    try {
+      const stats = fs.statSync(cacheFile);
+      const now = Date.now();
+      if (now - stats.mtimeMs < 300000) { // 5-minute cache validation
+        const cachedData = JSON.parse(fs.readFileSync(cacheFile, 'utf-8'));
+        commitsList = cachedData.commitsList;
+        totalCommits = cachedData.totalCommits;
+        heatmapCells = cachedData.heatmapCells;
+        gitEnabled = cachedData.gitEnabled;
+        cacheValid = true;
       }
-
-      // Sort all commits by timestamp descending and take the top 6
-      allCommits.sort((a, b) => b.timestamp - a.timestamp);
-      commitsList = allCommits.slice(0, 6).map(c => ({
-        hash: c.hash,
-        subject: c.subject,
-        author: c.author,
-        date: c.date,
-        project: c.project
-      }));
+    } catch (e) {
+      // Ignore cache load failure and rebuild
     }
-  } catch (err) {
-    // Fallback if filesystem read fails
   }
 
-  // Populate heatmap cells based on accumulated dates
-  if (gitEnabled) {
-    const today = new Date();
-    for (let i = 0; i < 52 * 7; i++) {
-      const d = new Date(today);
-      d.setDate(today.getDate() - (52 * 7 - 1 - i));
-      const dateStr = d.toISOString().split('T')[0];
-      const count = dateCounts[dateStr] || 0;
-      let density = 0;
-      if (count > 0) {
-        if (count <= 1) density = 1;
-        else if (count <= 3) density = 2;
-        else if (count <= 5) density = 3;
-        else density = 4;
+  if (!cacheValid) {
+    const dateCounts: Record<string, number> = {};
+    try {
+      const baseProjectsDir = 'C:\\Users\\praka\\my-github-projects';
+      if (fs.existsSync(baseProjectsDir)) {
+        const dirs = fs.readdirSync(baseProjectsDir);
+        const allCommits: { hash: string; subject: string; author: string; date: string; timestamp: number; project: string }[] = [];
+
+        for (const dir of dirs) {
+          const projPath = path.join(baseProjectsDir, dir);
+          if (!fs.statSync(projPath).isDirectory()) continue;
+
+          const gitDir = path.join(projPath, '.git');
+          if (fs.existsSync(gitDir)) {
+            try {
+              // Get commits from this directory
+              const gitLog = execSync('git log -n 10 --pretty=format:"%h|%s|%an|%ad|%at" --date=short', { 
+                cwd: projPath, 
+                encoding: 'utf-8',
+                stdio: ['pipe', 'pipe', 'ignore']
+              });
+
+              gitLog.split('\n').filter(Boolean).forEach(line => {
+                const [hash, subject, author, date, timestampStr] = line.split('|');
+                const timestamp = parseInt(timestampStr, 10) || 0;
+                allCommits.push({
+                  hash,
+                  subject: subject || 'No commit message',
+                  author: author || 'Unknown',
+                  date: date || '',
+                  timestamp,
+                  project: dir
+                });
+              });
+
+              // Count all commits for heatmap
+              const gitDates = execSync('git log --pretty=format:"%ad" --date=short', { 
+                cwd: projPath, 
+                encoding: 'utf-8',
+                stdio: ['pipe', 'pipe', 'ignore']
+              });
+              gitDates.split('\n').filter(Boolean).forEach(date => {
+                dateCounts[date] = (dateCounts[date] || 0) + 1;
+                totalCommits++;
+              });
+              gitEnabled = true;
+            } catch (e) {
+              // Skip directory on git failure
+            }
+          }
+        }
+
+        // Sort all commits by timestamp descending and take the top 6
+        allCommits.sort((a, b) => b.timestamp - a.timestamp);
+        commitsList = allCommits.slice(0, 6).map(c => ({
+          hash: c.hash,
+          subject: c.subject,
+          author: c.author,
+          date: c.date,
+          project: c.project
+        }));
       }
-      heatmapCells.push(density);
+    } catch (err) {
+      // Ignore directory listing failures
     }
-  } else {
-    // Fallback mock logs if git command is not available (e.g., in serverless host container)
-    totalCommits = 847;
-    commitsList = [
-      { hash: 'fdcbd78', subject: 'feat(portfolio): Integrate scanned GitHub projects and complete portfolio cataloging all 16 repositories', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
-      { hash: 'f308226', subject: 'docs(governance): add project-scoped AGENTS.md rules for engineering memory and repository intelligence', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
-      { hash: 'b3d6f40', subject: 'feat(hero): Anchor bottom portrait pixels to remain static and unmovable under hover and physics', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
-      { hash: '8ff7145', subject: 'feat(hero): Unified brand styling and Hero Section v2.0 with dynamic transparent background PNGs', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
-      { hash: 'c1622d0', subject: 'Initial commit with MIT License, complete dashboard features (Notes, Finance, Books, Habits)', author: 'buildwithpnj', date: '2026-07-03', project: 'Dashboard' }
-    ];
-    heatmapCells = Array.from({ length: 52 * 7 }, (_, i) => {
-      const factor = Math.sin(i / 15) * Math.cos(i / 30);
-      return Math.max(0, Math.floor((factor + 0.5) * 4));
-    });
+
+    // Populate heatmap cells based on accumulated dates or mock fallbacks
+    if (gitEnabled) {
+      const today = new Date();
+      for (let i = 0; i < 52 * 7; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - (52 * 7 - 1 - i));
+        const dateStr = d.toISOString().split('T')[0];
+        const count = dateCounts[dateStr] || 0;
+        let density = 0;
+        if (count > 0) {
+          if (count <= 1) density = 1;
+          else if (count <= 3) density = 2;
+          else if (count <= 5) density = 3;
+          else density = 4;
+        }
+        heatmapCells.push(density);
+      }
+    } else {
+      // Fallback mock logs if git command is not available (e.g. serverless containers)
+      totalCommits = 847;
+      commitsList = [
+        { hash: 'fdcbd78', subject: 'feat(portfolio): Integrate scanned GitHub projects and complete portfolio cataloging all 16 repositories', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
+        { hash: 'f308226', subject: 'docs(governance): add project-scoped AGENTS.md rules for engineering memory and repository intelligence', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
+        { hash: 'b3d6f40', subject: 'feat(hero): Anchor bottom portrait pixels to remain static and unmovable under hover and physics', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
+        { hash: '8ff7145', subject: 'feat(hero): Unified brand styling and Hero Section v2.0 with dynamic transparent background PNGs', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
+        { hash: 'c1622d0', subject: 'Initial commit with MIT License, complete dashboard features (Notes, Finance, Books, Habits)', author: 'buildwithpnj', date: '2026-07-03', project: 'Dashboard' }
+      ];
+      heatmapCells = Array.from({ length: 52 * 7 }, (_, i) => {
+        const factor = Math.sin(i / 15) * Math.cos(i / 30);
+        return Math.max(0, Math.floor((factor + 0.5) * 4));
+      });
+    }
+
+    // Write generated telemetry stats to cache file
+    try {
+      fs.writeFileSync(cacheFile, JSON.stringify({
+        commitsList,
+        totalCommits,
+        heatmapCells,
+        gitEnabled
+      }), 'utf-8');
+    } catch (e) {
+      // Ignore cache write errors
+    }
   }
 
   // Heatmap block color mappings

@@ -50,6 +50,15 @@ export interface LabExperiment {
   contentHtml: string;
 }
 
+// Memory caching containers
+let cachedBlogPosts: BlogPost[] | null = null;
+let cachedProjects: Project[] | null = null;
+let cachedExperiments: LabExperiment[] | null = null;
+
+const cachedBlogPostBySlug: Record<string, BlogPost | null> = {};
+const cachedProjectBySlug: Record<string, Project | null> = {};
+const cachedExperimentBySlug: Record<string, LabExperiment | null> = {};
+
 // Calculate reading time in minutes
 function calculateReadingTime(text: string): number {
   const wordsPerMinute = 200;
@@ -112,14 +121,23 @@ const mapBlogPost = (slug: string, data: any, content: string): BlogPost => {
 };
 
 export function getBlogPosts(): BlogPost[] {
-  return getItemsFromDirectory('blog', mapBlogPost)
+  if (cachedBlogPosts) return cachedBlogPosts;
+  cachedBlogPosts = getItemsFromDirectory('blog', mapBlogPost)
     .filter(post => !post.draft)
     .sort((a, b) => b.publishDate.localeCompare(a.publishDate));
+  return cachedBlogPosts;
 }
 
 export function getBlogPostBySlug(slug: string): BlogPost | null {
+  if (cachedBlogPostBySlug[slug] !== undefined) {
+    return cachedBlogPostBySlug[slug];
+  }
   const post = getItemBySlug('blog', slug, mapBlogPost);
-  if (post?.draft) return null;
+  if (post?.draft) {
+    cachedBlogPostBySlug[slug] = null;
+    return null;
+  }
+  cachedBlogPostBySlug[slug] = post;
   return post;
 }
 
@@ -149,12 +167,19 @@ const mapProject = (slug: string, data: any, content: string): Project => {
 };
 
 export function getProjects(): Project[] {
-  return getItemsFromDirectory('case-studies', mapProject)
+  if (cachedProjects) return cachedProjects;
+  cachedProjects = getItemsFromDirectory('case-studies', mapProject)
     .sort((a, b) => b.publishDate.localeCompare(a.publishDate));
+  return cachedProjects;
 }
 
 export function getProjectBySlug(slug: string): Project | null {
-  return getItemBySlug('case-studies', slug, mapProject);
+  if (cachedProjectBySlug[slug] !== undefined) {
+    return cachedProjectBySlug[slug];
+  }
+  const project = getItemBySlug('case-studies', slug, mapProject);
+  cachedProjectBySlug[slug] = project;
+  return project;
 }
 
 /* ==========================================================================
@@ -179,10 +204,18 @@ const mapLabExperiment = (slug: string, data: any, content: string): LabExperime
 };
 
 export function getExperiments(): LabExperiment[] {
-  return getItemsFromDirectory('experiments', mapLabExperiment)
+  if (cachedExperiments) return cachedExperiments;
+  cachedExperiments = getItemsFromDirectory('experiments', mapLabExperiment)
     .sort((a, b) => b.publishDate.localeCompare(a.publishDate));
+  return cachedExperiments;
 }
 
 export function getExperimentBySlug(slug: string): LabExperiment | null {
-  return getItemBySlug('experiments', slug, mapLabExperiment);
+  if (cachedExperimentBySlug[slug] !== undefined) {
+    return cachedExperimentBySlug[slug];
+  }
+  const experiment = getItemBySlug('experiments', slug, mapLabExperiment);
+  cachedExperimentBySlug[slug] = experiment;
+  return experiment;
 }
+
