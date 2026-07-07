@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Terminal as TerminalIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 
 interface TerminalProps {
   title?: string;
@@ -15,10 +16,18 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
   const [history, setHistory] = useState<string[]>([]);
   const [inputVal, setInputVal] = useState('');
   const [isStreaming, setIsStreaming] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  const { resolvedTheme } = useTheme();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Avoid hydration mismatch by waiting for mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Initialize history with initial lines
   useEffect(() => {
@@ -167,13 +176,35 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
     }
   };
 
+  // Determine dark terminal mode:
+  // - If resolvedTheme is light (Day Mode), make terminal Dark for striking contrast.
+  // - If resolvedTheme is dark (Night Mode), make terminal White as requested.
+  const isDarkTerminal = !mounted || resolvedTheme === 'light';
+
+  // Config mapping
+  const termBorder = isDarkTerminal 
+    ? 'border-[#1e2030]/80 shadow-[0_0_20px_rgba(6,182,212,0.18)]' 
+    : 'border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.08)]';
+    
+  const termHeader = isDarkTerminal 
+    ? 'bg-[#030406]/85 border-[#1e2030]/50 text-[#8e99b0]' 
+    : 'bg-[#f4f5f8] border-[#e4e6eb] text-[#4c566a]';
+    
+  const termScreen = isDarkTerminal 
+    ? 'bg-[#07080b]' 
+    : 'bg-[#ffffff]';
+    
+  const promptColor = isDarkTerminal ? 'text-[#06b6d4]' : 'text-[#0891b2]';
+  const promptInput = isDarkTerminal ? 'text-white' : 'text-[#090b10]';
+  const cursorColor = isDarkTerminal ? 'bg-[#06b6d4]' : 'bg-[#0891b2]';
+
   return (
     <div 
       onClick={handleTerminalClick}
-      className={cn("w-full rounded-2xl border border-[#1e2030]/80 bg-[#090b10] shadow-2xl overflow-hidden font-mono text-[10.5px] text-left cursor-text", className)}
+      className={cn("w-full rounded-2xl border transition-all duration-300 overflow-hidden font-mono text-[10.5px] text-left cursor-text", termBorder, className)}
     >
       {/* Terminal Window Header Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-[#030406]/85 border-b border-[#1e2030]/50 select-none">
+      <div className={cn("flex items-center justify-between px-4 py-2.5 border-b select-none", termHeader)}>
         <div className="flex items-center gap-1.5">
           {/* Simulated Mac OS window controls */}
           <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] border border-[#E0443E]/20" />
@@ -181,7 +212,7 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
           <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] border border-[#1AAB29]/20" />
         </div>
         
-        <span className="text-[9px] text-[#8e99b0] font-semibold flex items-center gap-1.5 uppercase tracking-wider font-sans">
+        <span className="text-[9px] font-semibold flex items-center gap-1.5 uppercase tracking-wider font-sans">
           <TerminalIcon className="h-3 w-3 text-primary" /> {title}
         </span>
         
@@ -191,7 +222,7 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
       {/* Terminal Content Screen */}
       <div 
         ref={screenRef}
-        className="p-4 flex flex-col gap-1.5 h-[240px] overflow-y-auto bg-[#07080b] text-[#a6accd]"
+        className={cn("p-4 flex flex-col gap-1.5 h-[240px] overflow-y-auto transition-colors duration-300", termScreen)}
       >
         {/* Output lines */}
         {history.map((line, idx) => {
@@ -202,8 +233,8 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
           if (isUserCommand) {
             return (
               <div key={idx} className="flex items-start gap-1 leading-relaxed">
-                <span className="text-[#06b6d4] shrink-0 font-bold">pnj@studio:~$</span>
-                <span className="whitespace-pre-wrap select-text text-white font-medium">{line.replace('pnj@studio:~$ ', '')}</span>
+                <span className={cn("shrink-0 font-bold", promptColor)}>pnj@studio:~$</span>
+                <span className={cn("whitespace-pre-wrap select-text font-medium", promptInput)}>{line.replace('pnj@studio:~$ ', '')}</span>
               </div>
             );
           }
@@ -215,7 +246,7 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
             const tag = match[2];
             const rest = match[3];
             
-            const tagColors: Record<string, string> = {
+            const tagColorsDark: Record<string, string> = {
               API: 'text-[#38bdf8]',
               TASK: 'text-[#c084fc]',
               DB: 'text-[#fb7185]',
@@ -224,27 +255,44 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
               SYS: 'text-[#fb923c]',
               SEC: 'text-[#2dd4bf]'
             };
+
+            const tagColorsLight: Record<string, string> = {
+              API: 'text-[#0284c7]',
+              TASK: 'text-[#7c3aed]',
+              DB: 'text-[#db2777]',
+              MEM: 'text-[#b45309]',
+              SYNC: 'text-[#059669]',
+              SYS: 'text-[#d97706]',
+              SEC: 'text-[#0d9488]'
+            };
+            
+            const tagClass = isDarkTerminal ? tagColorsDark[tag] : tagColorsLight[tag];
+            const timestampClass = isDarkTerminal ? 'text-[#4c566a]' : 'text-[#949fb5]';
+            const logLineColor = isDarkTerminal ? 'text-[#8e99b0]' : 'text-[#4c566a]';
             
             return (
-              <div key={idx} className="flex items-start gap-1 leading-relaxed text-[#8e99b0]">
-                {timestamp && <span className="text-[#4c566a] shrink-0">{timestamp}</span>}
-                <span className={cn("font-bold shrink-0", tagColors[tag])}>{tag}</span>
+              <div key={idx} className={cn("flex items-start gap-1 leading-relaxed", logLineColor)}>
+                {timestamp && <span className={cn("shrink-0", timestampClass)}>{timestamp}</span>}
+                <span className={cn("font-bold shrink-0", tagClass)}>{tag}</span>
                 <span className={cn(
                   "whitespace-pre-wrap select-text",
-                  isSuccess && 'text-[#10b981] font-semibold',
-                  isError && 'text-[#f87171]'
+                  isSuccess && (isDarkTerminal ? 'text-[#10b981] font-semibold' : 'text-[#047857] font-bold'),
+                  isError && (isDarkTerminal ? 'text-[#f87171]' : 'text-[#b91c1c] font-semibold')
                 )}>{rest}</span>
               </div>
             );
           }
 
+          const normalLineColor = isDarkTerminal ? 'text-[#8e99b0]' : 'text-[#4c566a]';
           return (
             <div key={idx} className="flex items-start gap-1 leading-relaxed">
               <span className={cn(
                 "whitespace-pre-wrap select-text",
-                isSuccess && 'text-[#10b981] font-semibold',
-                isError && 'text-[#f87171]',
-                (line.startsWith('Available') || line.startsWith('OS ') || line.includes('Specs')) ? 'text-[#2dd4bf]' : 'text-[#8e99b0]'
+                isSuccess && (isDarkTerminal ? 'text-[#10b981] font-semibold' : 'text-[#047857] font-bold'),
+                isError && (isDarkTerminal ? 'text-[#f87171]' : 'text-[#b91c1c] font-semibold'),
+                (line.startsWith('Available') || line.startsWith('OS ') || line.includes('Specs')) 
+                  ? (isDarkTerminal ? 'text-[#2dd4bf]' : 'text-[#0d9488]') 
+                  : normalLineColor
               )}>
                 {line}
               </span>
@@ -255,17 +303,17 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
         {/* Dynamic prompt input line */}
         {showPrompt && (
           <div className="flex items-center gap-1.5 mt-1 relative min-h-[1.5rem]">
-            <span className="text-[#06b6d4] shrink-0 font-bold">pnj@studio:~$</span>
+            <span className={cn("shrink-0 font-bold", promptColor)}>pnj@studio:~$</span>
             <div className="flex-1 flex items-center relative min-w-[50px]">
-              <span className="text-white font-medium whitespace-pre">{inputVal}</span>
-              <span className="w-1.5 h-3.5 bg-[#06b6d4] animate-pulse ml-0.5" />
+              <span className={cn("font-medium whitespace-pre", promptInput)}>{inputVal}</span>
+              <span className={cn("w-1.5 h-3.5 ml-0.5 animate-pulse", cursorColor)} />
               <input
                 ref={inputRef}
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-text outline-none font-mono text-white bg-transparent"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-text outline-none font-mono bg-transparent"
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect="off"
