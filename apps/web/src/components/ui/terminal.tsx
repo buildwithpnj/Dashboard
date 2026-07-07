@@ -170,10 +170,10 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
   return (
     <div 
       onClick={handleTerminalClick}
-      className={cn("w-full rounded-2xl border border-border/40 bg-card/65 backdrop-blur-md shadow-2xl overflow-hidden font-mono text-[10.5px] text-left cursor-text", className)}
+      className={cn("w-full rounded-2xl border border-[#1e2030]/80 bg-[#090b10] shadow-2xl overflow-hidden font-mono text-[10.5px] text-left cursor-text", className)}
     >
       {/* Terminal Window Header Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-background/60 border-b border-border/40 select-none">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[#030406]/85 border-b border-[#1e2030]/50 select-none">
         <div className="flex items-center gap-1.5">
           {/* Simulated Mac OS window controls */}
           <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] border border-[#E0443E]/20" />
@@ -181,7 +181,7 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
           <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] border border-[#1AAB29]/20" />
         </div>
         
-        <span className="text-[9px] text-muted-foreground font-semibold flex items-center gap-1.5 uppercase tracking-wider font-sans">
+        <span className="text-[9px] text-[#8e99b0] font-semibold flex items-center gap-1.5 uppercase tracking-wider font-sans">
           <TerminalIcon className="h-3 w-3 text-primary" /> {title}
         </span>
         
@@ -191,7 +191,7 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
       {/* Terminal Content Screen */}
       <div 
         ref={screenRef}
-        className="p-4 flex flex-col gap-1.5 h-[240px] overflow-y-auto bg-card/60 backdrop-blur-md text-muted-foreground"
+        className="p-4 flex flex-col gap-1.5 h-[240px] overflow-y-auto bg-[#07080b] text-[#a6accd]"
       >
         {/* Output lines */}
         {history.map((line, idx) => {
@@ -199,23 +199,55 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
           const isError = line.startsWith('bash:') || line.includes('ERROR') || line.includes('failed');
           const isSuccess = line.includes('SUCCESS') || line.includes('200 OK') || line.includes('success') || line.includes('ONLINE');
 
-          return (
-            <div key={idx} className="flex items-start gap-1 leading-relaxed">
-              {isUserCommand ? (
-                <>
-                  <span className="text-primary shrink-0 font-bold">pnj@studio:~$</span>
-                  <span className="whitespace-pre-wrap select-text text-foreground">{line.replace('pnj@studio:~$ ', '')}</span>
-                </>
-              ) : (
+          if (isUserCommand) {
+            return (
+              <div key={idx} className="flex items-start gap-1 leading-relaxed">
+                <span className="text-[#06b6d4] shrink-0 font-bold">pnj@studio:~$</span>
+                <span className="whitespace-pre-wrap select-text text-white font-medium">{line.replace('pnj@studio:~$ ', '')}</span>
+              </div>
+            );
+          }
+
+          // Parse for log tags: e.g. "[timestamp] TAG info" or "TAG info"
+          const match = line.match(/^(\[\d{2}:\d{2}:\d{2}\]\s+)?(API|TASK|DB|MEM|SYNC|SYS|SEC)\s+(.*)$/);
+          if (match) {
+            const timestamp = match[1] || '';
+            const tag = match[2];
+            const rest = match[3];
+            
+            const tagColors: Record<string, string> = {
+              API: 'text-[#38bdf8]',
+              TASK: 'text-[#c084fc]',
+              DB: 'text-[#fb7185]',
+              MEM: 'text-[#facc15]',
+              SYNC: 'text-[#34d399]',
+              SYS: 'text-[#fb923c]',
+              SEC: 'text-[#2dd4bf]'
+            };
+            
+            return (
+              <div key={idx} className="flex items-start gap-1 leading-relaxed text-[#8e99b0]">
+                {timestamp && <span className="text-[#4c566a] shrink-0">{timestamp}</span>}
+                <span className={cn("font-bold shrink-0", tagColors[tag])}>{tag}</span>
                 <span className={cn(
                   "whitespace-pre-wrap select-text",
-                  isSuccess && 'text-emerald-400 font-medium',
-                  isError && 'text-red-400',
-                  line.startsWith('Available') || line.startsWith('OS ') ? 'text-cyan-400' : ''
-                )}>
-                  {line}
-                </span>
-              )}
+                  isSuccess && 'text-[#10b981] font-semibold',
+                  isError && 'text-[#f87171]'
+                )}>{rest}</span>
+              </div>
+            );
+          }
+
+          return (
+            <div key={idx} className="flex items-start gap-1 leading-relaxed">
+              <span className={cn(
+                "whitespace-pre-wrap select-text",
+                isSuccess && 'text-[#10b981] font-semibold',
+                isError && 'text-[#f87171]',
+                (line.startsWith('Available') || line.startsWith('OS ') || line.includes('Specs')) ? 'text-[#2dd4bf]' : 'text-[#8e99b0]'
+              )}>
+                {line}
+              </span>
             </div>
           );
         })}
@@ -223,17 +255,17 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
         {/* Dynamic prompt input line */}
         {showPrompt && (
           <div className="flex items-center gap-1.5 mt-1 relative min-h-[1.5rem]">
-            <span className="text-primary shrink-0 font-bold">pnj@studio:~$</span>
+            <span className="text-[#06b6d4] shrink-0 font-bold">pnj@studio:~$</span>
             <div className="flex-1 flex items-center relative min-w-[50px]">
-              <span className="text-foreground whitespace-pre">{inputVal}</span>
-              <span className="w-1.5 h-3.5 bg-primary animate-pulse ml-0.5" />
+              <span className="text-white font-medium whitespace-pre">{inputVal}</span>
+              <span className="w-1.5 h-3.5 bg-[#06b6d4] animate-pulse ml-0.5" />
               <input
                 ref={inputRef}
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-text outline-none font-mono"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-text outline-none font-mono text-white bg-transparent"
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect="off"
