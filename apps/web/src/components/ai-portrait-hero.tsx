@@ -912,7 +912,7 @@ export function AIPortraitHero() {
           {/* RIGHT SIDE: Interactive Portrait and Orbiting Tech Stack Ecosystem */}
           <div 
             ref={rightContainerRef}
-            className="lg:col-span-7 w-full h-[650px] sm:h-[700px] md:h-[760px] relative flex items-center justify-center select-none z-20"
+            className="hidden lg:flex lg:col-span-7 w-full h-[760px] relative items-center justify-center select-none z-20"
           >
             {/* Top Orbiting Card: AI Voice Agent */}
             <div 
