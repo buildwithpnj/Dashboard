@@ -351,8 +351,8 @@ export function AIPortraitHero() {
       };
     }
 
-    // Cursor tracking
-    const handleMouseMove = (e: MouseEvent) => {
+    // Unified pointer tracking for mouse, touch, and pen events
+    const handlePointerMove = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;
@@ -366,14 +366,17 @@ export function AIPortraitHero() {
       mouseRef.current.targetRy = ry * -8;
     };
 
-    const handleMouseLeave = () => {
+    const handlePointerLeave = () => {
       mouseRef.current.inside = false;
       mouseRef.current.targetRx = 0;
       mouseRef.current.targetRy = 0;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerdown', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerLeave);
+    window.addEventListener('pointercancel', handlePointerLeave);
+    window.addEventListener('pointerleave', handlePointerLeave);
 
     let scanInterval = setInterval(() => {
       if (!scanRef.current.active) {
@@ -853,8 +856,11 @@ export function AIPortraitHero() {
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerdown', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerLeave);
+      window.removeEventListener('pointercancel', handlePointerLeave);
+      window.removeEventListener('pointerleave', handlePointerLeave);
       clearInterval(scanInterval);
       cancelAnimationFrame(animationFrameId);
     };
@@ -954,12 +960,12 @@ export function AIPortraitHero() {
             ref={rightContainerRef}
             className="lg:col-span-7 w-full mt-10 lg:mt-0 h-[440px] sm:h-[650px] lg:h-[760px] relative flex items-center justify-center select-none z-20"
           >
-            {/* Wrap orbiting stack elements in a layout overlay hidden on mobile viewports */}
-            <div className="absolute inset-0 pointer-events-none lg:pointer-events-auto hidden lg:block">
+            {/* Wrap orbiting stack elements in a unified pointer-interactive layout container */}
+            <div className="absolute inset-0 pointer-events-none lg:pointer-events-auto">
               {/* Top Orbiting Card: AI Voice Agent */}
               <div 
                 id="node-voiceagent"
-                className="absolute top-[2%] left-1/2 -translate-x-1/2 p-2 rounded-xl border border-border/30 bg-card/75 backdrop-blur-md text-left flex flex-col gap-1 max-w-[150px] shadow-lg shadow-cyan-500/5 hover:border-primary/30 transition-all hover:scale-[1.03] duration-300"
+                className="hidden lg:flex absolute top-[2%] left-1/2 -translate-x-1/2 p-2 rounded-xl border border-border/30 bg-card/75 backdrop-blur-md text-left flex-col gap-1 max-w-[150px] shadow-lg shadow-cyan-500/5 hover:border-primary/30 transition-all hover:scale-[1.03] duration-300"
               >
                 <div className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -975,7 +981,7 @@ export function AIPortraitHero() {
               <EcosystemNode 
                 id="node-python"
                 label="Python"
-                className="top-[18%] left-[10%]"
+                className="top-[18%] left-[2%] sm:left-[10%]"
                 hoverLabel="Ollama • DeepSeek • Mistral • Llama • Hugging Face"
                 hoveredNode={hoveredNode}
                 setHoveredNode={setHoveredNode}
@@ -985,27 +991,27 @@ export function AIPortraitHero() {
               <EcosystemNode 
                 id="node-fastapi"
                 label="FastAPI"
-                className="top-[18%] right-[10%]"
+                className="top-[18%] right-[2%] sm:right-[10%]"
                 hoverLabel="REST APIs • WebSockets • GraphQL • Node.js"
                 hoveredNode={hoveredNode}
                 setHoveredNode={setHoveredNode}
               />
 
-              {/* LangChain Badge */}
+              {/* LangChain Badge - Simplified (Hidden on mobile) */}
               <EcosystemNode 
                 id="node-langchain"
                 label="LangChain"
-                className="top-[30%] left-[4%]"
+                className="hidden sm:block top-[30%] left-[4%]"
                 hoverLabel="LangGraph • LlamaIndex • Agentic AI • Prompt Eng"
                 hoveredNode={hoveredNode}
                 setHoveredNode={setHoveredNode}
               />
 
-              {/* PostgreSQL Badge */}
+              {/* PostgreSQL Badge - Simplified (Hidden on mobile) */}
               <EcosystemNode 
                 id="node-postgresql"
                 label="PostgreSQL"
-                className="top-[30%] right-[4%]"
+                className="hidden sm:block top-[30%] right-[4%]"
                 hoverLabel="Redis • MongoDB • pgvector • Supabase"
                 hoveredNode={hoveredNode}
                 setHoveredNode={setHoveredNode}
@@ -1015,7 +1021,7 @@ export function AIPortraitHero() {
               <EcosystemNode 
                 id="node-claude"
                 label="Claude"
-                className="top-[42%] left-[10%]"
+                className="top-[42%] left-[2%] sm:left-[10%]"
                 hoverLabel="TypeScript • JavaScript • Embeddings • Context Eng"
                 hoveredNode={hoveredNode}
                 setHoveredNode={setHoveredNode}
@@ -1035,14 +1041,14 @@ export function AIPortraitHero() {
               <EcosystemNode 
                 id="node-openai"
                 label="OpenAI"
-                className="top-[42%] right-[10%]"
+                className="top-[42%] right-[2%] sm:right-[10%]"
                 hoverLabel="Tool Calling • Function Calling • Streaming • OAuth"
                 hoveredNode={hoveredNode}
                 setHoveredNode={setHoveredNode}
               />
 
               {/* CENTER LABELS (Visual hints overlay behind the portrait) */}
-              <div className="absolute top-[30%] left-1/2 -translate-x-1/2 text-center pointer-events-none">
+              <div className="hidden lg:block absolute top-[30%] left-1/2 -translate-x-1/2 text-center pointer-events-none">
                 <span className="font-pixel text-[8px] tracking-[0.3em] text-primary/30 uppercase block">AI CORE</span>
                 <span className="font-mono text-[7px] text-muted-foreground/20 uppercase block mt-1">REASONING • PLANNING • MEMORY</span>
               </div>
@@ -1050,7 +1056,7 @@ export function AIPortraitHero() {
               {/* Downward Vertical Orchestration Flow */}
               <div 
                 id="node-flow-mcp"
-                className="absolute top-[51%] left-1/2 -translate-x-1/2 w-full max-w-[280px] flex flex-col gap-1.5 items-center font-mono text-[8px]"
+                className="hidden lg:flex absolute top-[51%] left-1/2 -translate-x-1/2 w-full max-w-[280px] flex flex-col gap-1.5 items-center font-mono text-[8px]"
               >
                 {/* Vertical connecting line indicator */}
                 <div className="w-[1.2px] h-3 bg-gradient-to-b from-primary/35 to-purple-500/25 animate-pulse" />
@@ -1068,7 +1074,7 @@ export function AIPortraitHero() {
 
               {/* Hover secondary tech disclosures panel */}
               {hoveredNode && (
-                <div className="absolute bottom-[2px] left-4 right-4 p-2.5 rounded-xl border border-primary/20 bg-background/90 backdrop-blur-md flex flex-col gap-1 text-center font-mono text-[8.5px] z-30 shadow-lg animate-in">
+                <div className="hidden lg:flex absolute bottom-[2px] left-4 right-4 p-2.5 rounded-xl border border-primary/20 bg-background/90 backdrop-blur-md flex-col gap-1 text-center font-mono text-[8.5px] z-30 shadow-lg animate-in">
                   <span className="text-[7.5px] text-primary/80 uppercase font-black tracking-widest">{"// COMPILER PIPELINE STACK"}</span>
                   <span className="text-foreground font-black tracking-wide uppercase">{hoveredNode}</span>
                 </div>
