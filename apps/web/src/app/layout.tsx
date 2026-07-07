@@ -22,9 +22,34 @@ const pixelOperator = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'WarBorn OS',
+  title: {
+    default: 'BuildWithPNJ | AI Engineering Lab & Products',
+    template: '%s | BuildWithPNJ',
+  },
   description:
-    'A production-grade personal operating system — finance, books, habits, notes, and tools in one dense, keyboard-first interface.',
+    'Architecting autonomous AI products, context-aware systems, and production-ready agentic workflows. Discover verified system designs and active product blueprints.',
+  metadataBase: new URL('https://buildwithpnj.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'BuildWithPNJ | AI Engineering Lab & Products',
+    description: 'Architecting autonomous AI products, context-aware systems, and production-ready agentic workflows.',
+    url: 'https://buildwithpnj.com',
+    siteName: 'BuildWithPNJ',
+    type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BuildWithPNJ | AI Engineering Lab & Products',
+    description: 'Architecting autonomous AI products, context-aware systems, and production-ready agentic workflows.',
+    creator: '@buildwithpnj',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: '/favicon.ico',
   },
