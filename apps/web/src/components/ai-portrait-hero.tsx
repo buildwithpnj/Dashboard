@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Github, Twitter, Linkedin, Mail, Sparkles, Terminal } from 'lucide-react';
+import { ArrowRight, Github, Twitter, Linkedin, Mail } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 
@@ -76,19 +76,6 @@ export function AIPortraitHero() {
   // Parallax rotation states for heading and elements
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
-  // Typewriter typing animation states
-  const [displayText, setDisplayText] = useState('');
-  const [phraseIdx, setPhraseIdx] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [cursorVisible, setCursorVisible] = useState(true);
-  
-  const PHRASES = [
-    "AI Agents Building",
-    "Voice Agents Development",
-    "Workflow Automation",
-    "System Designing",
-    "UI/UX Product Engineering"
-  ];
 
   // Fetch portraits dynamic list on mount
   useEffect(() => {
@@ -122,41 +109,6 @@ export function AIPortraitHero() {
     }, 12000); // 12 seconds morph loop
     return () => clearInterval(interval);
   }, [portraits]);
-
-  // Blinking terminal cursor interval
-  useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setCursorVisible(v => !v);
-    }, 530);
-    return () => clearInterval(cursorInterval);
-  }, []);
-
-  // Typewriter character addition/deletion speed loop
-  useEffect(() => {
-    let timer: any;
-    const activePhrase = PHRASES[phraseIdx];
-    
-    if (isDeleting) {
-      timer = setTimeout(() => {
-        setDisplayText(activePhrase.substring(0, displayText.length - 1));
-      }, 35);
-    } else {
-      timer = setTimeout(() => {
-        setDisplayText(activePhrase.substring(0, displayText.length + 1));
-      }, 75);
-    }
-
-    if (!isDeleting && displayText === activePhrase) {
-      timer = setTimeout(() => {
-        setIsDeleting(true);
-      }, 2200);
-    } else if (isDeleting && displayText === '') {
-      setIsDeleting(false);
-      setPhraseIdx((prev) => (prev + 1) % PHRASES.length);
-    }
-
-    return () => clearTimeout(timer);
-  }, [displayText, isDeleting, phraseIdx]);
 
 
 
@@ -942,43 +894,44 @@ export function AIPortraitHero() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
           {/* Text block (Left side on large viewport) */}
-          <div className="lg:col-span-5 flex flex-col items-start gap-5 text-left max-w-xl">
+          <div className="lg:col-span-5 flex flex-col items-start gap-4 text-left max-w-xl">
             
-            <div className="font-pixel text-[10px] tracking-[0.25em] text-primary uppercase bg-primary/5 border border-primary/15 px-3 py-1 rounded-full animate-pulse select-none">
-              {"// NEURAL SCANNING ACTIVE"}
+            <div className="font-pixel text-[10px] tracking-[0.25em] text-primary uppercase bg-primary/5 border border-primary/15 px-3 py-1 rounded-full select-none">
+              {"// AI ENGINEERING LAB"}
             </div>
 
-            <h1 className="font-pixel text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-wide text-foreground uppercase select-text">
-              Prakash <br />
-              <span className="gradient-text">Nandan Jha</span>
+            <h1 className="font-pixel text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.15] tracking-wide text-foreground uppercase select-text">
+              Building AI Solutions<br />
+              That Actually Work.
             </h1>
 
-            {/* Dynamic Typewriter Advertisement Subtitle */}
-            <div className="font-mono text-sm sm:text-base text-foreground/90 flex items-center flex-wrap gap-1.5 select-none min-h-[1.5rem] bg-secondary/30 border border-border/40 px-3 py-1.5 rounded-xl">
-              <span className="text-primary font-bold animate-pulse">&gt;</span>
-              <span className="text-muted-foreground text-xs">I help with:</span>
-              <span className="text-primary font-semibold text-xs sm:text-sm">
-                {displayText}
-                <span className={`ml-0.5 text-primary font-bold ${cursorVisible ? 'opacity-100' : 'opacity-0'}`}>_</span>
-              </span>
+            {/* Static capability pills */}
+            <div className="font-mono text-xs sm:text-sm text-muted-foreground/70 flex items-center flex-wrap gap-x-2 gap-y-1 select-none">
+              <span>AI Agents</span>
+              <span className="text-primary/40">·</span>
+              <span>Voice AI</span>
+              <span className="text-primary/40">·</span>
+              <span>Business Automation</span>
+              <span className="text-primary/40">·</span>
+              <span>Intelligent Systems</span>
             </div>
 
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed select-text">
-              Building next-generation, production-ready AI products & automated workspaces. Explore active blueprints and R&D pipelines.
+              We architect autonomous AI agents, voice AI systems, and production-ready automation platforms. Every blueprint is verified, deployed, and open.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full sm:w-auto">
               <Link
                 href="/projects"
                 className="w-full sm:w-auto flex items-center justify-center gap-2 h-11 px-5 rounded-xl text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 shadow-md shadow-primary/20 transition-all hover:translate-y-[-1px]"
               >
-                Launch Blueprints <ArrowRight className="h-3.5 w-3.5" />
+                Explore Projects <ArrowRight className="h-3.5 w-3.5" />
               </Link>
               <Link
-                href="/journal"
+                href="/dashboard"
                 className="w-full sm:w-auto flex items-center justify-center h-11 px-5 rounded-xl text-xs font-semibold border border-border bg-secondary hover:bg-accent text-muted-foreground hover:text-foreground transition-all hover:translate-y-[-1px]"
               >
-                Read Journal
+                View Dashboard
               </Link>
             </div>
 
