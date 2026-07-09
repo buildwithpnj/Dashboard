@@ -289,7 +289,7 @@ export function AIPortraitHero() {
               accentCount++;
             }
 
-            let pSize = Math.random() * 1.5 + 2.5;
+            let pSize = Math.max(cellWidth, cellHeight) * (Math.random() * 0.15 + 0.90);
             let pAlpha = Math.random() * 0.35 + 0.65;
             
             // Soft chest fade-out at bottom
