@@ -4,12 +4,19 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from app.config import settings
 
-engine = create_async_engine(
-    settings.database_url,
-    echo=False,
-    pool_size=5,
-    max_overflow=10,
-)
+import sys
+print(f"DEBUG: settings.database_url value: {repr(settings.database_url)}", file=sys.stderr)
+
+try:
+    engine = create_async_engine(
+        settings.database_url,
+        echo=False,
+        pool_size=5,
+        max_overflow=10,
+    )
+except Exception as e:
+    print(f"DEBUG: create_async_engine failed with URL: {repr(settings.database_url)}. Error: {e}", file=sys.stderr)
+    raise
 
 async_session_factory = async_sessionmaker(
     engine,
