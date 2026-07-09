@@ -894,44 +894,62 @@ export function AIPortraitHero() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
           {/* Text block (Left side on large viewport) */}
-          <div className="lg:col-span-5 flex flex-col items-start gap-4 text-left max-w-xl">
+          <div className="lg:col-span-5 flex flex-col items-start gap-6 text-left max-w-xl">
             
             <div className="font-pixel text-[10px] tracking-[0.25em] text-primary uppercase bg-primary/5 border border-primary/15 px-3 py-1 rounded-full select-none">
               {"// AI ENGINEERING LAB"}
             </div>
 
-            <h1 className="font-pixel text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.15] tracking-wide text-foreground uppercase select-text">
+            <h1 className="font-pixel text-4xl sm:text-5xl lg:text-6xl leading-[1.1] tracking-wide text-foreground uppercase select-text">
               Building AI Solutions<br />
               That Actually Work.
             </h1>
 
-            {/* Static capability pills */}
-            <div className="font-mono text-xs sm:text-sm text-muted-foreground/70 flex items-center flex-wrap gap-x-2 gap-y-1 select-none">
-              <span>AI Agents</span>
-              <span className="text-primary/40">·</span>
-              <span>Voice AI</span>
-              <span className="text-primary/40">·</span>
-              <span>Business Automation</span>
-              <span className="text-primary/40">·</span>
-              <span>Intelligent Systems</span>
+            {/* Premium capability subheadline listing */}
+            <div className="font-mono text-xs sm:text-sm text-muted-foreground/80 flex flex-wrap items-center gap-x-3 gap-y-1.5 select-none py-1">
+              <div className="flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-primary" />
+                <span>AI Agents</span>
+              </div>
+              <span className="text-border/60">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-primary" />
+                <span>Voice AI</span>
+              </div>
+              <span className="text-border/60">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-primary" />
+                <span>Business Automation</span>
+              </div>
+              <span className="text-border/60">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-primary" />
+                <span>Intelligent Systems</span>
+              </div>
             </div>
 
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed select-text">
               We architect autonomous AI agents, voice AI systems, and production-ready automation platforms. Every blueprint is verified, deployed, and open.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full sm:w-auto">
+            <div className="flex flex-wrap items-center gap-3 w-full mt-2">
               <Link
                 href="/projects"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 h-11 px-5 rounded-xl text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 shadow-md shadow-primary/20 transition-all hover:translate-y-[-1px]"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 h-11 px-5 rounded-xl text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 shadow-md shadow-primary/20 transition-all hover:translate-y-[-1px] active:scale-[0.98]"
               >
-                Explore Projects <ArrowRight className="h-3.5 w-3.5" />
+                Explore Solutions <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+              <Link
+                href="/projects"
+                className="w-full sm:w-auto flex items-center justify-center h-11 px-5 rounded-xl text-xs font-semibold border border-border bg-secondary/40 hover:bg-accent text-muted-foreground hover:text-foreground transition-all hover:translate-y-[-1px] active:scale-[0.98]"
+              >
+                View Projects
               </Link>
               <Link
                 href="/dashboard"
-                className="w-full sm:w-auto flex items-center justify-center h-11 px-5 rounded-xl text-xs font-semibold border border-border bg-secondary hover:bg-accent text-muted-foreground hover:text-foreground transition-all hover:translate-y-[-1px]"
+                className="w-full sm:w-auto flex items-center justify-center h-11 px-5 rounded-xl text-xs font-semibold border border-border bg-secondary/40 hover:bg-accent text-muted-foreground hover:text-foreground transition-all hover:translate-y-[-1px] active:scale-[0.98]"
               >
-                View Dashboard
+                Open Dashboard
               </Link>
             </div>
 
