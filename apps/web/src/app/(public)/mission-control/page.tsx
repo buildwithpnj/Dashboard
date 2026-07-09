@@ -126,13 +126,14 @@ export default function PublicMissionControlPage() {
       }
     } else {
       // Fallback mock logs if git command is not available (e.g. serverless containers)
-      totalCommits = 847;
+      totalCommits = 880;
       commitsList = [
-        { hash: 'fdcbd78', subject: 'feat(portfolio): Integrate scanned GitHub projects and complete portfolio cataloging all 16 repositories', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
-        { hash: 'f308226', subject: 'docs(governance): add project-scoped AGENTS.md rules for engineering memory and repository intelligence', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
-        { hash: 'b3d6f40', subject: 'feat(hero): Anchor bottom portrait pixels to remain static and unmovable under hover and physics', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
-        { hash: '8ff7145', subject: 'feat(hero): Unified brand styling and Hero Section v2.0 with dynamic transparent background PNGs', author: 'buildwithpnj', date: '2026-07-06', project: 'Dashboard' },
-        { hash: 'c1622d0', subject: 'Initial commit with MIT License, complete dashboard features (Notes, Finance, Books, Habits)', author: 'buildwithpnj', date: '2026-07-03', project: 'Dashboard' }
+        { hash: 'c2ab969', subject: 'fix(api): replace asyncio.run() seeding with synchronous psycopg2 seed to eliminate event loop corruption on login', author: 'buildwithpnj', date: '2026-07-09', project: 'Dashboard' },
+        { hash: '21a52f5', subject: 'fix(alembic): escape percent signs for configparser in env.py', author: 'buildwithpnj', date: '2026-07-09', project: 'Dashboard' },
+        { hash: '562c032', subject: 'fix(api): disable statement cache in SQLAlchemy and Alembic for PgBouncer compatibility', author: 'buildwithpnj', date: '2026-07-09', project: 'Dashboard' },
+        { hash: '21c555e', subject: 'feat(homepage): Module 2.3 — Propagate dynamic photo-synced colors globally across entire homepage', author: 'buildwithpnj', date: '2026-07-09', project: 'Dashboard' },
+        { hash: 'c00a210', subject: 'feat(hero): Module 1.3 — Extract dominant pixel color from portrait and synchronize system glows', author: 'buildwithpnj', date: '2026-07-09', project: 'Dashboard' },
+        { hash: 'ca41b76', subject: 'feat(telemetry): Implement SystemTelemetryTicker LED status bar and biometric laser sweep on about page', author: 'buildwithpnj', date: '2026-07-09', project: 'Dashboard' }
       ];
       heatmapCells = Array.from({ length: 52 * 7 }, (_, i) => {
         const factor = Math.sin(i / 15) * Math.cos(i / 30);
@@ -222,22 +223,30 @@ export default function PublicMissionControlPage() {
         <div className="lg:col-span-7 p-6 rounded-2xl border border-border bg-card flex flex-col gap-4">
           <h3 className="font-pixel text-xs text-foreground tracking-wider uppercase">{"// CURRENT FOCUS"}</h3>
           <div className="flex flex-col gap-1">
-            <h4 className="text-lg font-bold text-foreground leading-none">Personal OS</h4>
-            <span className="text-xs text-muted-foreground font-mono mt-1 block">Status: Active · Sprint 14</span>
+            <h4 className="text-lg font-bold text-foreground leading-none">Personal OS — Homepage + Deployment</h4>
+            <span className="text-xs text-muted-foreground font-mono mt-1 block">Status: Active · Sprint 15 · Jul 9, 2026</span>
           </div>
 
           <div className="flex flex-col gap-3 font-mono text-xs text-muted-foreground bg-background p-4 rounded-xl border border-border">
             <div className="flex items-center gap-2">
               <span className="text-positive">☑</span>
-              <span>Dynamic self-assembling avatar particles</span>
+              <span>Canvas pixel color extraction → dynamic design system</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-positive">☑</span>
-              <span>Scrape local portfolios & write detailed case studies</span>
+              <span>SystemTelemetryTicker LED bar + project terminal sims</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-positive">☑</span>
+              <span>Fix asyncio event loop corruption on Render deploy</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-positive">☑</span>
+              <span>Live login working: prakashjhadps@gmail.com</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-muted-foreground">☐</span>
-              <span>Integrate telemetry logs inside Mission Control</span>
+              <span>Warborn OS dashboard full feature integration</span>
             </div>
           </div>
 
@@ -245,10 +254,10 @@ export default function PublicMissionControlPage() {
           <div className="flex flex-col gap-1.5 mt-2">
             <div className="flex justify-between items-center text-xs font-mono">
               <span className="text-muted-foreground">Sprint Progress</span>
-              <span className="text-foreground">85%</span>
+              <span className="text-foreground">92%</span>
             </div>
             <div className="w-full h-2 rounded-full bg-background overflow-hidden border border-border">
-              <div className="h-full bg-primary rounded-full" style={{ width: '85%' }} />
+              <div className="h-full bg-primary rounded-full" style={{ width: '92%' }} />
             </div>
           </div>
         </div>
@@ -377,15 +386,19 @@ export default function PublicMissionControlPage() {
           <div className="flex flex-col gap-2.5 font-mono text-[11px] text-muted-foreground text-left">
             <div className="flex items-center gap-2">
               <span className="text-positive">☑</span>
-              <span>Ship Agent Inbox UI tray</span>
+              <span>Ship canvas portrait color system</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-positive">☑</span>
-              <span>Publish journal log #12</span>
+              <span>Fix Render deployment + live login</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-positive">☑</span>
+              <span>Write engineering journal Day Log</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-4 h-4 rounded-full border border-border bg-background shrink-0" />
-              <span>Implement storage uploads</span>
+              <span>Warborn OS full dashboard integration</span>
             </div>
           </div>
         </div>
@@ -471,20 +484,26 @@ export default function PublicMissionControlPage() {
             
             <div className="relative py-2.5">
               <span className="absolute -left-[17px] top-[14px] w-1.5 h-1.5 rounded-full bg-primary" />
-              <span className="text-[9px] font-mono text-muted-foreground">TODAY</span>
-              <p className="text-foreground font-semibold mt-0.5">Shipped Personal OS Agent Inbox UI</p>
+              <span className="text-[9px] font-mono text-muted-foreground">JUL 9 · 21:26</span>
+              <p className="text-foreground font-semibold mt-0.5">Fixed asyncio event loop bug — login now works live</p>
             </div>
 
             <div className="relative py-2.5">
               <span className="absolute -left-[17px] top-[14px] w-1.5 h-1.5 rounded-full bg-primary" />
-              <span className="text-[9px] font-mono text-muted-foreground">YESTERDAY</span>
-              <p className="text-foreground font-semibold mt-0.5">Published journal writeup #12</p>
+              <span className="text-[9px] font-mono text-muted-foreground">JUL 9 · 16:34</span>
+              <p className="text-foreground font-semibold mt-0.5">Canvas portrait color sync across full homepage</p>
             </div>
 
             <div className="relative py-2.5">
               <span className="absolute -left-[17px] top-[14px] w-1.5 h-1.5 rounded-full bg-primary" />
-              <span className="text-[9px] font-mono text-muted-foreground">3 DAYS AGO</span>
-              <p className="text-foreground font-semibold mt-0.5">Created Multi-Agent experiment lab</p>
+              <span className="text-[9px] font-mono text-muted-foreground">JUL 9 · 15:30</span>
+              <p className="text-foreground font-semibold mt-0.5">SystemTelemetryTicker + biometric avatar shipped</p>
+            </div>
+
+            <div className="relative py-2.5">
+              <span className="absolute -left-[17px] top-[14px] w-1.5 h-1.5 rounded-full bg-primary opacity-50" />
+              <span className="text-[9px] font-mono text-muted-foreground">JUL 6</span>
+              <p className="text-foreground font-semibold mt-0.5 opacity-60">Portfolio catalog: all 16 repositories indexed</p>
             </div>
 
           </div>
