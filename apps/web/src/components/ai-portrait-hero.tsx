@@ -408,8 +408,21 @@ export function AIPortraitHero() {
       const gY = height * 0.5 + Math.cos(time * 0.5) * height * 0.2;
       const glowRad = Math.min(width, height) * 0.8;
       
-      const bgHue = (Date.now() * 0.012) % 360;
-      const ambientGlow = ctx.createRadialGradient(gX, gY, 10, gX, gY, glowRad);
+       const bgHue = (Date.now() * 0.012) % 360;
+       
+       // Update custom CSS variables on container element for synchronized HTML components
+       if (container) {
+         const activeColor = resolvedTheme === 'light'
+           ? `hsl(${bgHue}, 80%, 48%)`
+           : `hsl(${bgHue}, 90%, 65%)`;
+         const activeGlow = resolvedTheme === 'light'
+           ? `hsla(${bgHue}, 80%, 48%, 0.12)`
+           : `hsla(${bgHue}, 90%, 65%, 0.25)`;
+         container.style.setProperty('--hero-active-color', activeColor);
+         container.style.setProperty('--hero-active-color-glow', activeGlow);
+       }
+
+       const ambientGlow = ctx.createRadialGradient(gX, gY, 10, gX, gY, glowRad);
       if (isDark) {
         ambientGlow.addColorStop(0, `hsla(${bgHue}, 70%, 50%, 0.05)`);
         ambientGlow.addColorStop(0.35, `hsla(${(bgHue + 120) % 360}, 65%, 50%, 0.02)`);
@@ -1043,30 +1056,50 @@ export function AIPortraitHero() {
               {"// AI ENGINEERING LAB"}
             </div>
 
-            <h1 className="font-pixel text-4xl sm:text-5xl lg:text-6xl leading-[1.1] tracking-wide text-foreground uppercase select-text">
+             <h1 className="font-pixel text-4xl sm:text-5xl lg:text-6xl leading-[1.1] tracking-wide text-foreground uppercase select-text">
               Building AI Solutions<br />
-              That Actually Work.
+              <span 
+                className="transition-all duration-300 select-none ease-out"
+                style={{
+                  color: 'var(--hero-active-color, hsl(var(--primary)))',
+                  textShadow: '0 0 28px var(--hero-active-color-glow, rgba(59, 130, 246, 0.15))'
+                }}
+              >
+                That Actually Work.
+              </span>
             </h1>
 
             {/* Premium capability subheadline listing */}
             <div className="font-mono text-xs sm:text-sm text-muted-foreground/80 flex flex-wrap items-center gap-x-3 gap-y-1.5 select-none py-1">
               <div className="flex items-center gap-1.5">
-                <span className="w-1 h-1 rounded-full bg-primary" />
+                <span 
+                  className="w-1.5 h-1.5 rounded-full transition-all duration-300 ease-out"
+                  style={{ backgroundColor: 'var(--hero-active-color, hsl(var(--primary)))' }}
+                />
                 <span>AI Agents</span>
               </div>
               <span className="text-border/60">|</span>
               <div className="flex items-center gap-1.5">
-                <span className="w-1 h-1 rounded-full bg-primary" />
+                <span 
+                  className="w-1.5 h-1.5 rounded-full transition-all duration-300 ease-out"
+                  style={{ backgroundColor: 'var(--hero-active-color, hsl(var(--primary)))' }}
+                />
                 <span>Voice AI</span>
               </div>
               <span className="text-border/60">|</span>
               <div className="flex items-center gap-1.5">
-                <span className="w-1 h-1 rounded-full bg-primary" />
+                <span 
+                  className="w-1.5 h-1.5 rounded-full transition-all duration-300 ease-out"
+                  style={{ backgroundColor: 'var(--hero-active-color, hsl(var(--primary)))' }}
+                />
                 <span>Business Automation</span>
               </div>
               <span className="text-border/60">|</span>
               <div className="flex items-center gap-1.5">
-                <span className="w-1 h-1 rounded-full bg-primary" />
+                <span 
+                  className="w-1.5 h-1.5 rounded-full transition-all duration-300 ease-out"
+                  style={{ backgroundColor: 'var(--hero-active-color, hsl(var(--primary)))' }}
+                />
                 <span>Intelligent Systems</span>
               </div>
             </div>
@@ -1078,7 +1111,8 @@ export function AIPortraitHero() {
             <div className="flex flex-wrap items-center gap-3 w-full mt-2">
               <Link
                 href="/projects"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 h-11 px-5 rounded-xl text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 shadow-md shadow-primary/20 transition-all hover:translate-y-[-1px] active:scale-[0.98]"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 h-11 px-5 rounded-xl text-xs font-semibold text-primary-foreground hover:opacity-90 shadow-md shadow-primary/20 transition-all hover:translate-y-[-1px] active:scale-[0.98]"
+                style={{ backgroundColor: 'var(--hero-active-color, hsl(var(--primary)))' }}
               >
                 Explore Solutions <ArrowRight className="h-3.5 w-3.5" />
               </Link>
