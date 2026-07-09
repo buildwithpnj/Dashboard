@@ -319,3 +319,29 @@
   display: inline-block;
   animation: tickerSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ─── Global Dynamic Primary Theme Override ───────────────── */
+.text-primary, .group-hover\:text-primary:hover, .group\/card:hover .text-primary {
+  color: var(--hero-active-color, hsl(221.2 83.2% 53.3%)) !important;
+}
+
+.bg-primary, .hover\:bg-primary:hover, .group\/card:hover .bg-primary {
+  background-color: var(--hero-active-color, hsl(221.2 83.2% 53.3%)) !important;
+}
+
+.border-primary, .border-primary\/10, .border-primary\/15, .border-primary\/20, .border-primary\/30, .group-hover\/card:hover .border-primary\/20, .group\/card:hover .border-primary\/20 {
+  border-color: var(--hero-active-color, hsl(221.2 83.2% 53.3%)) !important;
+}
+
+.bg-primary\/5, .bg-primary\/10, .group-hover\/card:hover .bg-primary\/8, .group-hover\/card:hover .bg-primary\/5 {
+  background-color: var(--hero-active-color-glow, rgba(59, 130, 246, 0.08)) !important;
+}
+
+.shadow-primary\/10, .shadow-primary\/20, .group-hover\/card:hover .shadow-primary\/10, .group\/card:hover .shadow-primary\/10 {
+  --tw-shadow-color: var(--hero-active-color-glow, rgba(59, 130, 246, 0.15)) !important;
+}
+
+/* Update terminal prompt/caret color sync */
+.terminal-prompt-color {
+  color: var(--hero-active-color, hsl(221.2 83.2% 53.3%)) !important;
+}

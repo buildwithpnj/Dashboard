@@ -494,16 +494,17 @@ export function AIPortraitHero() {
        const activeS = Math.round(activeColorRef.current.s);
        const activeL = Math.round(activeColorRef.current.l);
 
-       // Update custom CSS variables on container element for synchronized HTML components
-       if (container) {
+       // Update custom CSS variables globally on document root for full homepage synchronization
+       if (typeof document !== 'undefined') {
+         const root = document.documentElement;
          const activeColor = resolvedTheme === 'light'
            ? `hsl(${activeH}, ${activeS}%, 45%)`
            : `hsl(${activeH}, ${activeS}%, 65%)`;
          const activeGlow = resolvedTheme === 'light'
            ? `hsla(${activeH}, ${activeS}%, 45%, 0.12)`
            : `hsla(${activeH}, ${activeS}%, 65%, 0.25)`;
-         container.style.setProperty('--hero-active-color', activeColor);
-         container.style.setProperty('--hero-active-color-glow', activeGlow);
+         root.style.setProperty('--hero-active-color', activeColor);
+         root.style.setProperty('--hero-active-color-glow', activeGlow);
        }
 
        const ambientGlow = ctx.createRadialGradient(gX, gY, 10, gX, gY, glowRad);

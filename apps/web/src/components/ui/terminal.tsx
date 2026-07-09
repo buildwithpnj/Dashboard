@@ -254,7 +254,7 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
           if (isUserCommand) {
             return (
               <div key={idx} className="flex items-start gap-1 leading-relaxed">
-                <span className={cn("shrink-0 font-bold", promptColor)}>pnj@studio:~$</span>
+                <span className={cn("shrink-0 font-bold terminal-prompt-color", promptColor)}>pnj@studio:~$</span>
                 <span className={cn("whitespace-pre-wrap select-text font-medium", promptInput)}>{line.replace('pnj@studio:~$ ', '')}</span>
               </div>
             );
@@ -324,10 +324,13 @@ export function Terminal({ title = 'warborn_telemetry.log', lines, className, sh
         {/* Dynamic prompt input line */}
         {showPrompt && (
           <div className="flex items-center gap-1.5 mt-1 relative min-h-[1.5rem]">
-            <span className={cn("shrink-0 font-bold", promptColor)}>pnj@studio:~$</span>
+            <span className={cn("shrink-0 font-bold terminal-prompt-color", promptColor)}>pnj@studio:~$</span>
             <div className="flex-1 flex items-center relative min-w-[50px]">
               <span className={cn("font-medium whitespace-pre", promptInput)}>{inputVal}</span>
-              <span className={cn("w-1.5 h-3.5 ml-0.5 animate-pulse", cursorColor)} />
+              <span 
+                className={cn("w-1.5 h-3.5 ml-0.5 animate-pulse")}
+                style={{ backgroundColor: 'var(--hero-active-color, #06b6d4)' }}
+              />
               <input
                 ref={inputRef}
                 type="text"
