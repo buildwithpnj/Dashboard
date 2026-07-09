@@ -94,7 +94,7 @@ export function PublicHeader() {
                   'text-[10px] font-mono font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-full transition-all duration-300 border relative',
                   isActive 
                     ? 'text-primary bg-primary/10 border-primary/20 shadow-[0_2px_10px_rgba(59,130,246,0.05)]' 
-                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60 border-transparent'
+                    : 'text-muted-foreground hover:text-primary hover:bg-primary/5 hover:border-primary/10 border-transparent'
                 )}
               >
                 {link.label}
@@ -160,7 +160,7 @@ export function PublicHeader() {
                     'text-base font-mono font-bold py-2 px-3 rounded-lg border transition-all duration-300',
                     isActive 
                       ? 'text-primary bg-primary/10 border-primary/20' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-secondary/40 border-transparent'
+                      : 'text-muted-foreground hover:text-primary hover:bg-primary/5 hover:border-primary/10 border-transparent'
                   )}
                 >
                   {link.label}
