@@ -1,3 +1,4 @@
+import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,7 +16,20 @@ class Settings(BaseSettings):
 
     def __init__(self, **values):
         super().__init__(**values)
+        # Robust fallback: fetch directly from host environment variables
+        env_db_url = (
+            os.environ.get("DATABASE_URL") or 
+            os.environ.get("DATABASE_PRIVATE_URL") or 
+            os.environ.get("database_url")
+        )
+        if env_db_url:
+            self.database_url = env_db_url
+
         if self.database_url:
+            # Clean trailing/leading whitespace and quotes
+            self.database_url = self.database_url.strip().strip('"').strip("'")
+            
+            # Standardize scheme for asyncpg
             if self.database_url.startswith("postgres://"):
                 self.database_url = self.database_url.replace("postgres://", "postgresql+asyncpg://", 1)
             elif self.database_url.startswith("postgresql://"):
