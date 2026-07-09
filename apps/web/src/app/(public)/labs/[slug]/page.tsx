@@ -17,6 +17,24 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title: `${exp.title} — BuildWithPNJ`,
     description: exp.tagline,
+    alternates: {
+      canonical: `/labs/${exp.slug}`,
+    },
+    openGraph: {
+      title: `${exp.title} — BuildWithPNJ`,
+      description: exp.tagline,
+      url: `https://buildwithpnj.in/labs/${exp.slug}`,
+      type: 'article',
+      publishedTime: exp.publishDate,
+      tags: exp.tags,
+      siteName: 'BuildWithPNJ',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${exp.title} — BuildWithPNJ`,
+      description: exp.tagline,
+      creator: '@buildwithpnj',
+    },
   };
 }
 

@@ -3,7 +3,7 @@ import { getExperiments } from '@/lib/content';
 import { LabsList } from '@/components/labs-list';
 
 export const metadata = {
-  title: 'Labs — BuildWithPNJ',
+  title: 'Labs',
   description: 'AI R&D lab: active experiments, model testing notes, multi-agent frameworks, and voice UI prototypes.',
 };
 
