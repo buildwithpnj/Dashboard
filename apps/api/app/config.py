@@ -14,58 +14,7 @@ class Settings(BaseSettings):
         "postgresql+asyncpg://personal_os:personal_os_dev@localhost:5432/personal_os"
     )
 
-    def __init__(self, **values):
-        super().__init__(**values)
-        # Robust fallback: fetch directly from host environment variables
-        env_db_url = (
-            os.environ.get("DATABASE_URL") or 
-            os.environ.get("DATABASE_PRIVATE_URL") or 
-            os.environ.get("database_url")
-        )
-        if env_db_url:
-            self.database_url = env_db_url
 
-        if self.database_url:
-            from urllib.parse import urlparse, urlunparse, quote, unquote
-            try:
-                # Clean trailing/leading whitespace and quotes
-                raw_url = self.database_url.strip().strip('"').strip("'")
-                parsed = urlparse(raw_url)
-                scheme = parsed.scheme
-                
-                # Standardize scheme for asyncpg
-                if scheme in ("postgres", "postgresql"):
-                    scheme = "postgresql+asyncpg"
-                    
-                netloc = parsed.netloc
-                if '@' in netloc:
-                    userinfo, hostinfo = netloc.rsplit('@', 1)
-                    if ':' in userinfo:
-                        username, password = userinfo.split(':', 1)
-                        # URL-encode username and password safely to prevent special character parse issues
-                        username = quote(unquote(username))
-                        password = quote(unquote(password))
-                        userinfo = f"{username}:{password}"
-                    else:
-                        userinfo = quote(unquote(userinfo))
-                    netloc = f"{userinfo}@{hostinfo}"
-                    
-                # Reconstruct standardized URL
-                self.database_url = urlunparse((
-                    scheme,
-                    netloc,
-                    parsed.path,
-                    parsed.params,
-                    parsed.query,
-                    parsed.fragment
-                ))
-            except Exception:
-                # Fallback: simple prefix replacement if urllib parsing fails
-                self.database_url = self.database_url.strip().strip('"').strip("'")
-                if self.database_url.startswith("postgres://"):
-                    self.database_url = self.database_url.replace("postgres://", "postgresql+asyncpg://", 1)
-                elif self.database_url.startswith("postgresql://"):
-                    self.database_url = self.database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
 
     # Redis
     redis_url: str = "redis://localhost:6379/0"
