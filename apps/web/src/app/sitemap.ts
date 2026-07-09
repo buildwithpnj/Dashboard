@@ -1,5 +1,4 @@
-import { MetadataRoute } from 'next';
-import { getBlogPosts, getProjects } from '@/lib/content';
+import { getBlogPosts, getProjects, getExperiments } from '@/lib/content';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://buildwithpnj.in';
@@ -12,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/journal',
     '/contact',
     '/mission-control',
+    '/labs',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date().toISOString().split('T')[0],
@@ -37,5 +37,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...journalRoutes, ...projectRoutes];
+  // 4. Fetch dynamic lab experiment routes
+  const experiments = getExperiments();
+  const labRoutes = experiments.map((exp) => ({
+    url: `${baseUrl}/labs/${exp.slug}`,
+    lastModified: exp.publishDate || new Date().toISOString().split('T')[0],
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...journalRoutes, ...projectRoutes, ...labRoutes];
 }
