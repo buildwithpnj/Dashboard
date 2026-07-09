@@ -72,6 +72,7 @@ export function AIPortraitHero() {
   const morphProgressRef = useRef(1.0);
   const pixelateProgressRef = useRef(0);
   const nextImageLoadedRef = useRef<HTMLImageElement | null>(null);
+  const neuralPulseRef = useRef({ progress: 0 });
   
   // Parallax rotation states for heading and elements
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
@@ -483,9 +484,103 @@ export function AIPortraitHero() {
         morphProgressRef.current += 0.03;
       }
 
+      // Update neural pulse state
+      const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!isReducedMotion) {
+        neuralPulseRef.current.progress += 0.0035;
+        if (neuralPulseRef.current.progress >= 1.0) {
+          neuralPulseRef.current.progress = 0;
+        }
+      }
+
+      // Draw subtle blue glow behind the portrait centerpiece
+      if (layoutRef.current.targetWidth > 0) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        const portraitGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, layoutRef.current.targetWidth * 0.95);
+        portraitGlow.addColorStop(0, 'rgba(59, 130, 246, 0.15)');
+        portraitGlow.addColorStop(0.5, 'rgba(6, 182, 212, 0.04)');
+        portraitGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = portraitGlow;
+        ctx.beginPath();
+        ctx.arc(cx, cy, layoutRef.current.targetWidth * 0.95, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Draw blueprint overlay rings and coordinate markers around the portrait center
+      if (layoutRef.current.targetWidth > 0) {
+        ctx.save();
+        ctx.strokeStyle = isDark ? 'rgba(6, 182, 212, 0.08)' : 'rgba(59, 130, 246, 0.11)';
+        ctx.lineWidth = 0.6;
+        ctx.setLineDash([4, 8]);
+        
+        // Concentric radar rings
+        ctx.beginPath();
+        ctx.arc(cx, cy, layoutRef.current.targetWidth * 0.58, 0, Math.PI * 2);
+        ctx.arc(cx, cy, layoutRef.current.targetWidth * 0.78, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Technical bounding grid box
+        const boxSize = layoutRef.current.targetWidth * 1.15;
+        ctx.strokeRect(cx - boxSize/2, cy - boxSize/2, boxSize, boxSize);
+        
+        // Coordinate corner brackets
+        ctx.setLineDash([]);
+        const bracketSize = 8;
+        const half = boxSize / 2;
+        
+        // Top-Left
+        ctx.beginPath();
+        ctx.moveTo(cx - half, cy - half + bracketSize);
+        ctx.lineTo(cx - half, cy - half);
+        ctx.lineTo(cx - half + bracketSize, cy - half);
+        ctx.stroke();
+        
+        // Top-Right
+        ctx.beginPath();
+        ctx.moveTo(cx + half, cy - half + bracketSize);
+        ctx.lineTo(cx + half, cy - half);
+        ctx.lineTo(cx + half - bracketSize, cy - half);
+        ctx.stroke();
+
+        // Bottom-Left
+        ctx.beginPath();
+        ctx.moveTo(cx - half, cy + half - bracketSize);
+        ctx.lineTo(cx - half, cy + half);
+        ctx.lineTo(cx - half + bracketSize, cy + half);
+        ctx.stroke();
+
+        // Bottom-Right
+        ctx.beginPath();
+        ctx.moveTo(cx + half, cy + half - bracketSize);
+        ctx.lineTo(cx + half, cy + half);
+        ctx.lineTo(cx + half - bracketSize, cy + half);
+        ctx.stroke();
+        
+        ctx.restore();
+      }
+
+      // Draw neural pulse expansion wave travelling outwards along grid and neural paths
+      if (layoutRef.current.targetWidth > 0 && !isReducedMotion) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        const pulseProgress = neuralPulseRef.current.progress;
+        const maxRadius = Math.max(width, height) * 0.45;
+        const pulseRadius = pulseProgress * maxRadius;
+        
+        ctx.strokeStyle = isDark 
+          ? `rgba(6, 182, 212, ${0.12 * (1.0 - pulseProgress)})` 
+          : `rgba(59, 130, 246, ${0.16 * (1.0 - pulseProgress)})`;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.arc(cx, cy, pulseRadius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
       // Render portrait particles
       const particles = particlesRef.current;
-      const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       
       const mouseX = mouseRef.current.x;
       const mouseY = mouseRef.current.y;
@@ -623,14 +718,62 @@ export function AIPortraitHero() {
           pSize = pSize * (1.0 + pixelateFactor * 2.8);
         }
 
+        // Tiny pixel shimmer (subtle high-frequency brightness twinkle)
+        let particleAlpha = p.alpha;
+        if (!isReducedMotion) {
+          const shimmer = Math.sin(time * 12 + (p.ox * 17) + (p.oy * 23)) * 0.12;
+          particleAlpha = Math.max(0.1, Math.min(1.0, p.alpha + shimmer));
+        }
+
+        // Chromatic aberration (holographic cyan/red offsets)
+        if (!isReducedMotion && resolvedTheme !== 'light' && Math.random() < 0.05) {
+          const offset = 2.0;
+          
+          // Cyan offset
+          ctx.fillStyle = `rgba(6, 182, 212, ${particleAlpha * 0.45})`;
+          ctx.fillRect(px - pSize / 2 - offset, py - pSize / 2, pSize, pSize);
+          
+          // Red offset
+          ctx.fillStyle = `rgba(239, 68, 68, ${particleAlpha * 0.35})`;
+          ctx.fillRect(px - pSize / 2 + offset, py - pSize / 2, pSize, pSize);
+        }
+
         if (resolvedTheme !== 'light') {
-          ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${p.alpha * 0.35})`;
+          ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${particleAlpha * 0.35})`;
           ctx.fillRect(px - pSize, py - pSize, pSize * 2, pSize * 2);
         }
-        ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${p.alpha})`;
+        ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${particleAlpha})`;
         ctx.fillRect(px - pSize / 2, py - pSize / 2, pSize, pSize);
       });
       ctx.restore();
+
+      // Holographic scanlines overlay clip box on the portrait bounds
+      if (layoutRef.current.targetWidth > 0 && !isReducedMotion) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        const gridBoxY = layoutRef.current.yOffset;
+        const gridBoxH = layoutRef.current.targetHeight;
+        const gridBoxX = layoutRef.current.xOffset;
+        const gridBoxW = layoutRef.current.targetWidth;
+        
+        ctx.beginPath();
+        ctx.rect(gridBoxX, gridBoxY, gridBoxW, gridBoxH);
+        ctx.clip();
+        
+        // Draw horizontal scanning bars
+        const barSpacing = 4;
+        const barOffset = (Date.now() * 0.04) % barSpacing;
+        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = isDark ? 'rgba(6, 182, 212, 0.06)' : 'rgba(59, 130, 246, 0.09)';
+        
+        ctx.beginPath();
+        for (let y = gridBoxY + barOffset; y < gridBoxY + gridBoxH; y += barSpacing) {
+          ctx.moveTo(gridBoxX, y);
+          ctx.lineTo(gridBoxX + gridBoxW, y);
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
 
       // Spawn and Render Rising Energy Embers
       if (!isReducedMotion) {
