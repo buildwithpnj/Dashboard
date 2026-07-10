@@ -224,18 +224,30 @@ export function PremiumPixelBackground() {
     const masterSegments: CircuitSegment[] = [];
     const secPositions = nodeStatesRef.current.map(n => Math.round((sectionPositionsRef.current[n.sectionId] || 500) / GRID) * GRID);
 
+    // Left Trunk down to Solutions section
     masterSegments.push({ x1: leftTrunkX, y1: startY, x2: leftTrunkX, y2: secPositions[2] + GRID });
-    masterSegments.push({ x1: leftTrunkX, y1: secPositions[2] + GRID, x2: centerX - GRID * 3, y2: secPositions[2] + GRID });
     
-    // Solutions -> Projects
-    masterSegments.push({ x1: centerX - GRID * 3, y1: secPositions[2] + GRID, x2: centerX + GRID * 3, y2: secPositions[2] + GRID });
-    masterSegments.push({ x1: centerX + GRID * 3, y1: secPositions[2] + GRID, x2: rightTrunkX, y2: secPositions[2] + GRID });
-    masterSegments.push({ x1: rightTrunkX, y1: secPositions[2] + GRID, x2: rightTrunkX, y2: secPositions[3] + GRID });
-    masterSegments.push({ x1: rightTrunkX, y1: secPositions[3] + GRID, x2: centerX, y2: secPositions[3] + GRID });
+    // Solutions Section: Zig-zag to avoid "Autonomous Systems Backend" header
+    const ySolutionBase = secPositions[2] + GRID;
+    masterSegments.push({ x1: leftTrunkX, y1: ySolutionBase, x2: leftTrunkX + GRID * 2, y2: ySolutionBase });
+    masterSegments.push({ x1: leftTrunkX + GRID * 2, y1: ySolutionBase, x2: leftTrunkX + GRID * 4, y2: ySolutionBase - GRID * 2 });
+    masterSegments.push({ x1: leftTrunkX + GRID * 4, y1: ySolutionBase - GRID * 2, x2: centerX - GRID * 1, y2: ySolutionBase - GRID * 2 });
+    masterSegments.push({ x1: centerX - GRID * 1, y1: ySolutionBase - GRID * 2, x2: centerX + GRID * 1, y2: ySolutionBase });
+    masterSegments.push({ x1: centerX + GRID * 1, y1: ySolutionBase, x2: rightTrunkX, y2: ySolutionBase });
     
-    // Projects -> Labs -> Footer
-    masterSegments.push({ x1: centerX, y1: secPositions[3] + GRID, x2: leftTrunkX, y2: secPositions[3] + GRID });
-    masterSegments.push({ x1: leftTrunkX, y1: secPositions[3] + GRID, x2: leftTrunkX, y2: secPositions[7] + GRID });
+    // Right Trunk down to Projects section
+    masterSegments.push({ x1: rightTrunkX, y1: ySolutionBase, x2: rightTrunkX, y2: secPositions[3] + GRID });
+    
+    // Projects Section: Zig-zag to avoid "Active Builds" header
+    const yProjectBase = secPositions[3] + GRID;
+    masterSegments.push({ x1: rightTrunkX, y1: yProjectBase, x2: centerX + GRID * 1, y2: yProjectBase });
+    masterSegments.push({ x1: centerX + GRID * 1, y1: yProjectBase, x2: centerX - GRID * 1, y2: yProjectBase - GRID * 2 });
+    masterSegments.push({ x1: centerX - GRID * 1, y1: yProjectBase - GRID * 2, x2: leftTrunkX + GRID * 4, y2: yProjectBase - GRID * 2 });
+    masterSegments.push({ x1: leftTrunkX + GRID * 4, y1: yProjectBase - GRID * 2, x2: leftTrunkX + GRID * 2, y2: yProjectBase });
+    masterSegments.push({ x1: leftTrunkX + GRID * 2, y1: yProjectBase, x2: leftTrunkX, y2: yProjectBase });
+    
+    // Left Trunk down to Footer section
+    masterSegments.push({ x1: leftTrunkX, y1: yProjectBase, x2: leftTrunkX, y2: secPositions[7] + GRID });
     masterSegments.push({ x1: leftTrunkX, y1: secPositions[7] + GRID, x2: centerX, y2: secPositions[7] + GRID });
 
     paths.push({
