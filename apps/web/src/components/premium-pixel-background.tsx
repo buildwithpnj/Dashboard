@@ -77,11 +77,17 @@ const SUBSYSTEM_NODES: SubSystemNode[] = [
 
 export function PremiumPixelBackground() {
   const { resolvedTheme } = useTheme();
+  const isDarkRef = useRef(resolvedTheme === 'dark');
+  useEffect(() => {
+    isDarkRef.current = resolvedTheme === 'dark';
+  }, [resolvedTheme]);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [inViewport, setInViewport] = useState(true);
   const [accentHSL, setAccentHSL] = useState({ h: 221, s: 83, l: 53 });
+  const accentHSLRef = useRef({ h: 221, s: 83, l: 53 });
 
   // References for rendering logic (refs used for perfect 60fps)
   const pathsRef = useRef<CircuitPath[]>([]);
@@ -477,7 +483,7 @@ export function PremiumPixelBackground() {
       }
       
       const scrollY = window.scrollY;
-      const isDark = resolvedTheme === 'dark';
+      const isDark = isDarkRef.current;
 
       // ─── Color Sync (Read directly from document style properties) ────
       let activeH = 221;
@@ -498,7 +504,8 @@ export function PremiumPixelBackground() {
       } catch { /* fallback */ }
 
       // Update state when color changes (throttled to avoid loop re-renders)
-      if (activeH !== accentHSL.h || activeS !== accentHSL.s || activeL !== accentHSL.l) {
+      if (activeH !== accentHSLRef.current.h || activeS !== accentHSLRef.current.s || activeL !== accentHSLRef.current.l) {
+        accentHSLRef.current = { h: activeH, s: activeS, l: activeL };
         setAccentHSL({ h: activeH, s: activeS, l: activeL });
       }
 
@@ -731,7 +738,7 @@ export function PremiumPixelBackground() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('hero-pulse', handleHeroPulse);
     };
-  }, [inViewport, resolvedTheme, accentHSL, measureSections]);
+  }, [inViewport, measureSections]);
 
   return (
     <div 
