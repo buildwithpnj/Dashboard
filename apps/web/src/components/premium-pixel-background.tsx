@@ -85,6 +85,7 @@ export function PremiumPixelBackground() {
   // References for rendering logic (refs used for perfect 60fps)
   const pathsRef = useRef<CircuitPath[]>([]);
   const packetsRef = useRef<Packet[]>([]);
+  const lastMasterSpawnRef = useRef<number>(0);
   const nodeStatesRef = useRef<SubSystemNode[]>(SUBSYSTEM_NODES);
   const sectionPositionsRef = useRef<Record<string, number>>({});
   const pulseWavesRef = useRef<{ y: number; speed: number; alpha: number }[]>([]);
@@ -227,7 +228,7 @@ export function PremiumPixelBackground() {
     // Left Trunk down to Solutions section
     masterSegments.push({ x1: leftTrunkX, y1: startY, x2: leftTrunkX, y2: secPositions[2] + GRID });
     
-    // Solutions Section: Zig-zag to avoid "Autonomous Systems Backend" header
+    // 1. Solutions Section: Zig-zag to avoid "Autonomous Systems Backend" header
     const ySolutionBase = secPositions[2] + GRID;
     masterSegments.push({ x1: leftTrunkX, y1: ySolutionBase, x2: leftTrunkX + GRID * 2, y2: ySolutionBase });
     masterSegments.push({ x1: leftTrunkX + GRID * 2, y1: ySolutionBase, x2: leftTrunkX + GRID * 4, y2: ySolutionBase - GRID * 2 });
@@ -238,16 +239,38 @@ export function PremiumPixelBackground() {
     // Right Trunk down to Projects section
     masterSegments.push({ x1: rightTrunkX, y1: ySolutionBase, x2: rightTrunkX, y2: secPositions[3] + GRID });
     
-    // Projects Section: Zig-zag to avoid "Active Builds" header
+    // 2. Projects Section: Zig-zag to avoid "Active Builds" header
     const yProjectBase = secPositions[3] + GRID;
     masterSegments.push({ x1: rightTrunkX, y1: yProjectBase, x2: centerX + GRID * 1, y2: yProjectBase });
     masterSegments.push({ x1: centerX + GRID * 1, y1: yProjectBase, x2: centerX - GRID * 1, y2: yProjectBase - GRID * 2 });
     masterSegments.push({ x1: centerX - GRID * 1, y1: yProjectBase - GRID * 2, x2: leftTrunkX + GRID * 4, y2: yProjectBase - GRID * 2 });
     masterSegments.push({ x1: leftTrunkX + GRID * 4, y1: yProjectBase - GRID * 2, x2: leftTrunkX + GRID * 2, y2: yProjectBase });
     masterSegments.push({ x1: leftTrunkX + GRID * 2, y1: yProjectBase, x2: leftTrunkX, y2: yProjectBase });
-    
+
+    // Left Trunk down to R&D Labs section
+    masterSegments.push({ x1: leftTrunkX, y1: yProjectBase, x2: leftTrunkX, y2: secPositions[4] + GRID });
+
+    // 3. R&D Labs Section: Zig-zag to avoid R&D Labs header
+    const yLabsBase = secPositions[4] + GRID;
+    masterSegments.push({ x1: leftTrunkX, y1: yLabsBase, x2: leftTrunkX + GRID * 2, y2: yLabsBase });
+    masterSegments.push({ x1: leftTrunkX + GRID * 2, y1: yLabsBase, x2: leftTrunkX + GRID * 4, y2: yLabsBase - GRID * 2 });
+    masterSegments.push({ x1: leftTrunkX + GRID * 4, y1: yLabsBase - GRID * 2, x2: centerX - GRID * 1, y2: yLabsBase - GRID * 2 });
+    masterSegments.push({ x1: centerX - GRID * 1, y1: yLabsBase - GRID * 2, x2: centerX + GRID * 1, y2: yLabsBase });
+    masterSegments.push({ x1: centerX + GRID * 1, y1: yLabsBase, x2: rightTrunkX, y2: yLabsBase });
+
+    // Right Trunk down to Articles/Newsletter section
+    masterSegments.push({ x1: rightTrunkX, y1: yLabsBase, x2: rightTrunkX, y2: secPositions[6] + GRID });
+
+    // 4. Articles Section: Zig-zag to avoid Articles header
+    const yArticlesBase = secPositions[6] + GRID;
+    masterSegments.push({ x1: rightTrunkX, y1: yArticlesBase, x2: centerX + GRID * 1, y2: yArticlesBase });
+    masterSegments.push({ x1: centerX + GRID * 1, y1: yArticlesBase, x2: centerX - GRID * 1, y2: yArticlesBase - GRID * 2 });
+    masterSegments.push({ x1: centerX - GRID * 1, y1: yArticlesBase - GRID * 2, x2: leftTrunkX + GRID * 4, y2: yArticlesBase - GRID * 2 });
+    masterSegments.push({ x1: leftTrunkX + GRID * 4, y1: yArticlesBase - GRID * 2, x2: leftTrunkX + GRID * 2, y2: yArticlesBase });
+    masterSegments.push({ x1: leftTrunkX + GRID * 2, y1: yArticlesBase, x2: leftTrunkX, y2: yArticlesBase });
+
     // Left Trunk down to Footer section
-    masterSegments.push({ x1: leftTrunkX, y1: yProjectBase, x2: leftTrunkX, y2: secPositions[7] + GRID });
+    masterSegments.push({ x1: leftTrunkX, y1: yArticlesBase, x2: leftTrunkX, y2: secPositions[7] + GRID });
     masterSegments.push({ x1: leftTrunkX, y1: secPositions[7] + GRID, x2: centerX, y2: secPositions[7] + GRID });
 
     paths.push({
@@ -261,20 +284,6 @@ export function PremiumPixelBackground() {
     // Initialize packets if empty
     if (packetsRef.current.length === 0) {
       const packets: Packet[] = [];
-      
-      // Spawn one Master BuildWithPNJ packet (White/Bright)
-      packets.push({
-        pathIndex: paths.length - 1,
-        segmentIndex: 0,
-        progress: 0,
-        speed: 0.0006, // Slowed down from 0.003
-        size: 5,
-        alpha: 1.0,
-        isMaster: true,
-        label: 'PNJ-MASTER',
-        category: 'broadcast',
-        colorOverride: '#FFFFFF'
-      });
 
       // Spawn regular traffic packets (slowed speed & bright solid opacity)
       for (let i = 0; i < 150; i++) {
@@ -344,9 +353,7 @@ export function PremiumPixelBackground() {
 
     // Event hooks
     const handleScroll = () => {
-      if (Math.random() < 0.03) {
-        measureSections();
-      }
+      // Keep background lines completely static during scroll to prevent jumps
     };
 
     const handleResize = () => {
@@ -424,6 +431,31 @@ export function PremiumPixelBackground() {
       }
 
       ctx.clearRect(0, 0, W, H);
+
+      // ─── 5-Second Master Flow Packet Spawner ───
+      const now = Date.now();
+      if (now - lastMasterSpawnRef.current >= 5000) {
+        if (lastMasterSpawnRef.current === 0) {
+          lastMasterSpawnRef.current = now - 3500; // Spawn first packet in 1.5 seconds
+        } else {
+          lastMasterSpawnRef.current = now;
+          const masterPathIdx = pathsRef.current.findIndex(p => p.id === 'master-data-flow');
+          if (masterPathIdx !== -1) {
+            packetsRef.current.push({
+              pathIndex: masterPathIdx,
+              segmentIndex: 0,
+              progress: 0,
+              speed: 0.0016, // Snaking pace
+              size: 5.5,
+              alpha: 1.0,
+              isMaster: true,
+              label: 'PNJ-MASTER',
+              category: 'broadcast',
+              colorOverride: '#FFFFFF'
+            });
+          }
+        }
+      }
       
       const scrollY = window.scrollY;
       const isDark = resolvedTheme === 'dark';
@@ -670,9 +702,6 @@ export function PremiumPixelBackground() {
       ctx.shadowBlur = 0;
     };
 
-    // Setup periodic layout measurement
-    const measureInterval = setInterval(measureSections, 4000);
-
     render();
 
     return () => {
@@ -682,7 +711,6 @@ export function PremiumPixelBackground() {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('hero-pulse', handleHeroPulse);
-      clearInterval(measureInterval);
     };
   }, [inViewport, resolvedTheme, accentHSL, measureSections]);
 
