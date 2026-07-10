@@ -1,5 +1,11 @@
 # Roadmap
 
+## Phase 0: Search Visibility & SEO Foundation (Completed)
+- [x] Configured Google Search Console verification in public root.
+- [x] Implemented dynamic sitemap.ts generation using `MetadataRoute`.
+- [x] Blocked search engine crawlers from indexing `/login` and `/register` auth views.
+- [x] Set up standard robots.txt routing profiles.
+
 ## Phase 1: Grid Foundation & Background (Completed)
 - [x] Snapped all circuit lines to the 32px blueprint grid.
 - [x] Implemented global `PremiumPixelBackground` with falling square pixel particles and snap grids.

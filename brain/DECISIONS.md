@@ -21,3 +21,12 @@
 * **Problem**: Outer header container and inner buttons all carried distinct borders and color tints, resulting in a nested "box-in-a-box" clutter.
 * **Solution**: Moved the dynamic color tint (`var(--hero-active-color-glow)`) and shadows to the outer container. Removed borders and solid backdrops on inner buttons, switching them to borderless transparent glass (`bg-black/5 dark:bg-white/5`), only displaying active colors on mouse hover.
 * **Tradeoffs**: Inner buttons look unified and flat, matching Linear and Vercel design aesthetics, but hover effects must remain crisp and immediate.
+
+## ADR-005: Next.js Dynamic Sitemap Generator Integration
+* **Problem**: Search engines need an active index of dynamic research labs, write-ups, and projects without manual configuration on updates.
+* **Solution**: Integrated dynamic `sitemap.ts` using Next.js `MetadataRoute` templates to dynamically parse routing configurations on every query.
+* **Tradeoffs**: Introduces a minor query build check on sitemap fetch, but fully eliminates stale sitemap links.
+
+## ADR-006: Subtler Mouse Parallax Dampening Multipliers
+* **Problem**: Mouse coordinates tracking inside the AI Portrait Hero workspace originally caused extreme, rapid rotations that felt distracting.
+* **Solution**: Halved the rotation multiplier forces (dampening client side input factors) inside the tracking frame updates, delivering smooth 3D tilting effects.
