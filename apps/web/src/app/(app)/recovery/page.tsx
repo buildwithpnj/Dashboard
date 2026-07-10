@@ -15,6 +15,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { api } from '@/lib/api';
+import { RecoveryIntervention } from '@/components/recovery-intervention';
 
 interface RelapseLog {
   id: string;
@@ -182,6 +183,9 @@ export default function QuitAddictionPage() {
         <div className="lg:col-span-2 overflow-y-auto space-y-6 pr-2">
           {selectedAdd ? (
             <div className="space-y-6">
+              {/* Cognitive Behavioral Intervention Engine */}
+              <RecoveryIntervention />
+
               {/* Sovereign Streak Header */}
               <div className="rounded-2xl border border-border bg-card/45 p-6 text-center space-y-4 flex flex-col items-center relative grid-dots">
                 <div className="rounded-full bg-primary/10 border border-primary/20 p-5">
