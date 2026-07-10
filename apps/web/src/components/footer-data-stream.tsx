@@ -256,7 +256,7 @@ export function FooterDataStream() {
   }, [inViewport]);
 
   const glow = heroColor || '#3B82F6';
-  const collectColor = '#E5484D';
+  const collectColor = glow;
   const glowCSS = `0 0 12px ${glow}, 0 0 24px ${glow}66`;
 
   return (
