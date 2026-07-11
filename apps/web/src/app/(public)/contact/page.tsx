@@ -20,7 +20,6 @@ export default function PublicContactPage() {
     name: '',
     company: '',
     useCase: 'Production Voice Agent',
-    budgetRange: 'Startup / Discovery Phase',
     message: '',
     altContact: ''
   });
@@ -43,7 +42,6 @@ export default function PublicContactPage() {
         name: '',
         company: '',
         useCase: 'Production Voice Agent',
-        budgetRange: 'Startup / Discovery Phase',
         message: '',
         altContact: ''
       });
@@ -111,13 +109,13 @@ export default function PublicContactPage() {
                   />
                 </div>
 
-                {/* Company */}
+                {/* Company or Team */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="company" className="font-mono text-[10px] text-muted-foreground uppercase font-bold">Company</label>
+                  <label htmlFor="company" className="font-mono text-[10px] text-muted-foreground uppercase font-bold">Company or Team (optional)</label>
                   <input
                     type="text"
                     id="company"
-                    placeholder="AI Lab"
+                    placeholder="Acme Corp"
                     value={formData.company}
                     onChange={(e) => setFormData({...formData, company: e.target.value})}
                     className="h-10 px-3 rounded-xl border border-border/40 bg-background/50 focus:border-primary/50 focus:outline-none transition-colors"
@@ -125,47 +123,31 @@ export default function PublicContactPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Use Case Dropdown */}
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="useCase" className="font-mono text-[10px] text-muted-foreground uppercase font-bold">Use Case *</label>
-                  <select
-                    id="useCase"
-                    value={formData.useCase}
-                    onChange={(e) => setFormData({...formData, useCase: e.target.value})}
-                    className="h-10 px-3 rounded-xl border border-border/40 bg-background/50 focus:border-primary/50 focus:outline-none transition-colors font-sans text-xs cursor-pointer"
-                  >
-                    <option>Production Voice Agent</option>
-                    <option>RAG Business Assistant</option>
-                    <option>Custom Agentic Workflow</option>
-                    <option>Core Software Automation</option>
-                  </select>
-                </div>
-
-                {/* Budget Dropdown */}
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="budgetRange" className="font-mono text-[10px] text-muted-foreground uppercase font-bold">Budget Range *</label>
-                  <select
-                    id="budgetRange"
-                    value={formData.budgetRange}
-                    onChange={(e) => setFormData({...formData, budgetRange: e.target.value})}
-                    className="h-10 px-3 rounded-xl border border-border/40 bg-background/50 focus:border-primary/50 focus:outline-none transition-colors font-sans text-xs cursor-pointer"
-                  >
-                    <option>Startup / Discovery Phase</option>
-                    <option>SMB Automation Scale</option>
-                    <option>Enterprise Pipeline</option>
-                  </select>
-                </div>
+              {/* Use Case Select */}
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="useCase" className="font-mono text-[10px] text-muted-foreground uppercase font-bold">Use Case *</label>
+                <select
+                  id="useCase"
+                  value={formData.useCase}
+                  onChange={(e) => setFormData({...formData, useCase: e.target.value})}
+                  className="h-10 px-3 rounded-xl border border-border/40 bg-background/50 focus:border-primary/50 focus:outline-none transition-colors font-sans text-xs cursor-pointer"
+                >
+                  <option>AI Automation Systems</option>
+                  <option>Voice and Agent Workflows</option>
+                  <option>Search / Retrieval Systems</option>
+                  <option>Dashboards and Internal Tools</option>
+                  <option>Technical Collaboration</option>
+                </select>
               </div>
 
               {/* Message */}
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="message" className="font-mono text-[10px] text-muted-foreground uppercase font-bold">Message Details *</label>
+                <label htmlFor="message" className="font-mono text-[10px] text-muted-foreground uppercase font-bold">Project Details *</label>
                 <textarea
                   id="message"
                   required
-                  rows={4}
-                  placeholder="Outline your target automation requirements and constraints..."
+                  rows={5}
+                  placeholder="Describe what you would like to build or automate..."
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
                   className="p-3 rounded-xl border border-border/40 bg-background/50 focus:border-primary/50 focus:outline-none transition-colors resize-none"
@@ -174,12 +156,12 @@ export default function PublicContactPage() {
 
               {/* Alternate Contact / Email */}
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="altContact" className="font-mono text-[10px] text-muted-foreground uppercase font-bold">Primary Contact Info *</label>
+                <label htmlFor="altContact" className="font-mono text-[10px] text-muted-foreground uppercase font-bold">Email or Contact Link *</label>
                 <input
                   type="text"
                   id="altContact"
                   required
-                  placeholder="Email, X (@handle), or LinkedIn url"
+                  placeholder="Email, X (@handle), or LinkedIn URL"
                   value={formData.altContact}
                   onChange={(e) => setFormData({...formData, altContact: e.target.value})}
                   className="h-10 px-3 rounded-xl border border-border/40 bg-background/50 focus:border-primary/50 focus:outline-none transition-colors"
@@ -207,24 +189,23 @@ export default function PublicContactPage() {
         {/* Right Side: Directory & Direct Connections */}
         <div className="lg:col-span-5 flex flex-col gap-6">
           
-          {/* Contact Inquiries Guidelines */}
+          {/* Block 1: What You Can Reach Out For */}
           <div className="p-6 rounded-2xl border border-border/40 bg-card/35 backdrop-blur-md flex flex-col gap-4 text-left shadow-sm">
-            <div className="font-mono text-[9px] text-primary/80 tracking-[0.25em] uppercase font-bold">{"// CONTACT INQUIRIES"}</div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              I am available for work, collaborations, and technical queries regarding my projects:
-            </p>
+            <div className="font-mono text-[9px] text-primary/80 tracking-[0.25em] uppercase font-bold">{"// INQUIRY INBOX"}</div>
+            <h3 className="text-sm font-bold text-foreground">What You Can Reach Out For</h3>
             <ul className="text-xs text-muted-foreground flex flex-col gap-2.5 pl-4 list-disc space-y-1">
-              <li><strong>Custom AI Integration</strong>: Custom multilingual voice agent pipelines and systems architecture.</li>
-              <li><strong>Search & Retrieval</strong>: High-fidelity document search, vector indexing, or database implementations.</li>
-              <li><strong>Dashboards & Admin Panels</strong>: Custom business operations dashboards and self-hostable tools.</li>
-              <li><strong>General Queries</strong>: Direct collaborations, open-source feedback, or technical consulting.</li>
+              <li>AI automation systems</li>
+              <li>Voice and agent workflows</li>
+              <li>Search / retrieval systems</li>
+              <li>Dashboards and internal tools</li>
+              <li>Technical collaboration</li>
             </ul>
           </div>
 
-          {/* Email Card */}
+          {/* Block 2: Primary Contact */}
           <div className="p-6 rounded-2xl border border-border/40 bg-card/35 backdrop-blur-md flex flex-col gap-4 text-left shadow-sm">
-            <div className="font-mono text-[9px] text-primary/80 tracking-[0.25em] uppercase font-bold">{"// DIRECT ROUTING"}</div>
-            
+            <div className="font-mono text-[9px] text-primary/80 tracking-[0.25em] uppercase font-bold">{"// EMAIL CHANNELS"}</div>
+            <h3 className="text-sm font-bold text-foreground">Primary Contact</h3>
             <a
               href="mailto:hello@buildwithpnj.in"
               className="flex items-center gap-4 p-3 rounded-xl border border-border/45 bg-background/80 hover:bg-accent group transition-all overflow-hidden"
@@ -241,10 +222,10 @@ export default function PublicContactPage() {
             </a>
           </div>
 
-          {/* Social Profiles Grid */}
+          {/* Block 3: Connect Online */}
           <div className="p-6 rounded-2xl border border-border/40 bg-card/35 backdrop-blur-md flex flex-col gap-4 text-left shadow-sm">
-            <div className="font-mono text-[9px] text-primary/80 tracking-[0.25em] uppercase font-bold">{"// NETWORK CHANNELS"}</div>
-            
+            <div className="font-mono text-[9px] text-primary/80 tracking-[0.25em] uppercase font-bold">{"// NETWORK INDEX"}</div>
+            <h3 className="text-sm font-bold text-foreground">Connect Online</h3>
             <div className="grid grid-cols-1 gap-2 text-xs">
               {socialLinks.map((social, idx) => (
                 <a
