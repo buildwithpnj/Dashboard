@@ -65,10 +65,10 @@ export default function PublicContactPage() {
       
       {/* Title */}
       <div className="flex flex-col gap-2">
-        <div className="font-mono text-[10px] text-primary tracking-[0.25em] uppercase font-bold">{"// PIPELINE INGESTION"}</div>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Initiate System Design</h1>
+        <div className="font-mono text-[10px] text-primary tracking-[0.25em] uppercase font-bold">{"// GET IN TOUCH"}</div>
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{"Let's Build Together"}</h1>
         <p className="text-base text-muted-foreground max-w-xl leading-relaxed mt-2">
-          Tell us what you are trying to automate — voice, RAG, or a custom agentic workflow — and we will respond with a technical brief within 48 hours.
+          Have a workflow you want to automate, a custom voice agent you need to deploy, or a question about my work? Drop me a message below, and I will get back to you with a technical response.
         </p>
       </div>
 
@@ -82,9 +82,9 @@ export default function PublicContactPage() {
                 <CheckCircle2 className="h-6 w-6" />
               </div>
               <div className="flex flex-col gap-1.5">
-                <h3 className="text-lg font-bold text-foreground">System Intent Ingested</h3>
+                <h3 className="text-lg font-bold text-foreground">Message Received</h3>
                 <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
-                  Your requirements brief has been submitted successfully to the pipeline. We will follow up via your alt contact details.
+                  Your request has been submitted successfully. I will get back to you with a technical response shortly.
                 </p>
               </div>
               <button 
@@ -198,7 +198,7 @@ export default function PublicContactPage() {
                 disabled={status === 'submitting'}
                 className="mt-2 flex items-center justify-center gap-2 h-11 px-5 rounded-xl font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-all active:scale-[0.98] shadow-md shadow-primary/10 disabled:opacity-50"
               >
-                {status === 'submitting' ? 'Submitting...' : 'Submit System Request'} <Send className="h-3.5 w-3.5" />
+                {status === 'submitting' ? 'Submitting...' : 'Submit Project Brief'} <Send className="h-3.5 w-3.5" />
               </button>
             </form>
           )}
@@ -207,20 +207,34 @@ export default function PublicContactPage() {
         {/* Right Side: Directory & Direct Connections */}
         <div className="lg:col-span-5 flex flex-col gap-6">
           
+          {/* Contact Inquiries Guidelines */}
+          <div className="p-6 rounded-2xl border border-border/40 bg-card/35 backdrop-blur-md flex flex-col gap-4 text-left shadow-sm">
+            <div className="font-mono text-[9px] text-primary/80 tracking-[0.25em] uppercase font-bold">{"// CONTACT INQUIRIES"}</div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              I am available for work, collaborations, and technical queries regarding my projects:
+            </p>
+            <ul className="text-xs text-muted-foreground flex flex-col gap-2.5 pl-4 list-disc space-y-1">
+              <li><strong>Custom AI Integration</strong>: Custom multilingual voice agent pipelines and systems architecture.</li>
+              <li><strong>Search & Retrieval</strong>: High-fidelity document search, vector indexing, or database implementations.</li>
+              <li><strong>Dashboards & Admin Panels</strong>: Custom business operations dashboards and self-hostable tools.</li>
+              <li><strong>General Queries</strong>: Direct collaborations, open-source feedback, or technical consulting.</li>
+            </ul>
+          </div>
+
           {/* Email Card */}
           <div className="p-6 rounded-2xl border border-border/40 bg-card/35 backdrop-blur-md flex flex-col gap-4 text-left shadow-sm">
             <div className="font-mono text-[9px] text-primary/80 tracking-[0.25em] uppercase font-bold">{"// DIRECT ROUTING"}</div>
             
             <a
               href="mailto:hello@buildwithpnj.in"
-              className="flex items-center gap-4 p-3 rounded-xl border border-border/45 bg-background/80 hover:bg-accent group transition-all"
+              className="flex items-center gap-4 p-3 rounded-xl border border-border/45 bg-background/80 hover:bg-accent group transition-all overflow-hidden"
             >
-              <div className="h-10 w-10 rounded-lg bg-card border border-border flex items-center justify-center text-primary group-hover:text-primary/80">
+              <div className="h-10 w-10 rounded-lg bg-card border border-border flex items-center justify-center text-primary group-hover:text-primary/80 shrink-0">
                 <Mail className="h-4 w-4" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0">
                 <span className="text-[8px] text-muted-foreground font-mono leading-none">EMAIL</span>
-                <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors mt-1 font-mono">
+                <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors mt-1 font-mono truncate select-all">
                   hello@buildwithpnj.in
                 </span>
               </div>

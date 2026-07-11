@@ -75,7 +75,7 @@ export default function PublicAboutPage() {
             Principal AI Product Engineer @ buildwithpnj
           </p>
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mt-2">
-            I am Prakash Nandan Jha, known online as **buildwithpnj**. I have 2+ years of production software and AI engineering experience. My focus is shipping production-grade AI systems, multilingual voice agents, robust RAG engines, and operational dashboards for local service businesses and global clients.
+            I build production-grade AI applications, custom voice agents, and high-performance retrieval architectures that solve real-world problems. Operating under the brand **buildwithpnj**, I specialize in taking systems from initial design into robust, live customer production environments.
           </p>
           
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 p-4 rounded-xl border border-border/30 bg-card/25 backdrop-blur-sm font-mono text-[9px]">
@@ -110,28 +110,50 @@ export default function PublicAboutPage() {
 
       {/* 2. CHRONICLES & MISSION */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-        <div className="lg:col-span-7 flex flex-col gap-6">
+        <div className="lg:col-span-7 flex flex-col gap-8">
           <div className="flex items-center gap-2">
             <span className="font-mono text-[10px] tracking-[0.25em] text-primary/80 uppercase">
               {"// CHRONICLES"}
             </span>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground -mt-3">
-            Why I Build in the Open
-          </h2>
-          
-          <div className="text-xs sm:text-sm text-muted-foreground leading-relaxed flex flex-col gap-5">
-            <p>
-              I got into coding because I wanted to solve my own problems. What started as simple command-line scripts to automate backups and file organization evolved into a fascination with local models and vector indexing.
+
+          {/* Who I Am */}
+          <div className="flex flex-col gap-2 -mt-4">
+            <h3 className="text-lg font-bold text-foreground font-mono flex items-center gap-2">
+              <span className="text-primary font-black">01.</span> Who I Am
+            </h3>
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              I am Prakash Nandan Jha, a software developer and AI engineer based in India. What started as writing simple command-line scripts to automate my own daily tasks quickly grew into a passion for building reliable software at scale. Today, I combine full-stack development with modern generative models, vector search, and agentic workflows to build software that operates autonomously and efficiently.
             </p>
-            <p>
-              During this journey, I noticed a persistent gap: most tutorials stopped at simple notebook scripts or toy chat interfaces. They hid the messy reality of production systems—rate limits, async task queues, memory context leaks, and vector similarity tuning.
+          </div>
+
+          {/* What I Build */}
+          <div className="flex flex-col gap-2">
+            <h3 className="text-lg font-bold text-foreground font-mono flex items-center gap-2">
+              <span className="text-primary font-black">02.</span> What I Build
+            </h3>
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              I focus on building software that solves concrete operations and growth problems. My work spans custom multilingual voice systems, semantic search engines, and real-time business dashboards. You can explore some of my active commercial work on the <Link href="/projects" className="text-primary hover:underline font-semibold">Projects</Link> page.
             </p>
-            <blockquote className="border-l-2 border-primary pl-4 my-2 italic text-foreground/90 font-medium">
-              &ldquo;BuildWithPNJ is a commitment to building production-ready, self-hostable tools that power operations&mdash;and sharing every blueprint along the way.&rdquo;
-            </blockquote>
-            <p>
-              By documenting every schema decision, pipeline failure, and performance patch, I hope to demystify complex AI agent deployments for other product builders.
+          </div>
+
+          {/* How I Work */}
+          <div className="flex flex-col gap-2">
+            <h3 className="text-lg font-bold text-foreground font-mono flex items-center gap-2">
+              <span className="text-primary font-black">03.</span> How I Work
+            </h3>
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              I believe in reliability, speed, and clean architecture. I write clean, grid-aligned code, build interfaces that put user legibility first, and ensure all systems run with low latency and secure parameters. For experimental ideas and pre-release tools, I maintain an active workspace on my <Link href="/labs" className="text-primary hover:underline font-semibold">R&D Labs</Link> page.
+            </p>
+          </div>
+
+          {/* What I Share Publicly */}
+          <div className="flex flex-col gap-2">
+            <h3 className="text-lg font-bold text-foreground font-mono flex items-center gap-2">
+              <span className="text-primary font-black">04.</span> What I Share Publicly
+            </h3>
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              I build in the open because I believe the best way to understand systems is to share their blueprints. I document my design decisions, pipeline failures, and optimization logs in my <Link href="/journal" className="text-primary hover:underline font-semibold">Technical Journal</Link>. You can also watch live agent systems telemetry on the <Link href="/mission-control" className="text-primary hover:underline font-semibold font-mono">Mission Control</Link> dashboard.
             </p>
           </div>
         </div>
