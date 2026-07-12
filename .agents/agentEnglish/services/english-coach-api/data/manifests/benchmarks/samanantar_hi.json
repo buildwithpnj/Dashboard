@@ -1,0 +1,11 @@
+{
+  "dataset_name": "samanantar_hi",
+  "source_url": "https://huggingface.co/datasets/ai4bharat/samanantar",
+  "split": "train",
+  "language": "hi-en",
+  "license": "CC BY 4.0",
+  "intended_use": "Hindi-English parallel translation benchmark",
+  "commercial_restriction": true,
+  "ingestion_version": "v8.0",
+  "max_examples": 1000
+}

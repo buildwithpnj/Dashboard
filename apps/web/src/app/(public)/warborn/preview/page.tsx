@@ -165,6 +165,26 @@ export default function WarbornPreviewSandbox() {
             <div ref={chatEndRef} />
           </div>
 
+          {/* Clickable prompt chips */}
+          <div className="px-4 py-2 bg-secondary/10 border-t border-border/40 flex flex-wrap gap-2 text-[10px] font-mono justify-start">
+            <span className="text-muted-foreground mr-1">Try:</span>
+            {[
+              { label: "Correct Grammar", text: "correct grammar: Me has went to home yesterday" },
+              { label: "Professional Rewrite", text: "rewrite professionally: tell him i am late" },
+              { label: "Translate Hinglish", text: "translate hinglish: please adjust kar lo" }
+            ].map((prompt, idx) => (
+              <button
+                key={idx}
+                type="button"
+                disabled={turnsCount >= 5 || loading}
+                onClick={() => setInputText(prompt.text)}
+                className="px-2 py-0.5 rounded border border-border/60 bg-card hover:bg-muted/40 hover:border-primary/30 transition-all text-muted-foreground hover:text-foreground"
+              >
+                {prompt.label}
+              </button>
+            ))}
+          </div>
+
           {/* Form input */}
           <form onSubmit={handleSend} className="border-t border-border/60 p-3 bg-secondary/20 flex gap-2">
             <input

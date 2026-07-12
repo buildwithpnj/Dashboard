@@ -1,0 +1,3 @@
+{"id": "amb_01", "input_text": "kal usko bol dena", "expected_style": "Hinglish", "expected_intent": "correct", "expected_ambiguity": true, "reference_natural": null, "reference_professional": null, "tags": ["ambiguity", "hinglish"]}
+{"id": "amb_02", "input_text": "do that", "expected_style": "English", "expected_intent": "correct", "expected_ambiguity": true, "reference_natural": null, "reference_professional": null, "tags": ["ambiguity", "english"]}
+{"id": "amb_03", "input_text": "tell him", "expected_style": "English", "expected_intent": "correct", "expected_ambiguity": true, "reference_natural": null, "reference_professional": null, "tags": ["ambiguity", "english"]}

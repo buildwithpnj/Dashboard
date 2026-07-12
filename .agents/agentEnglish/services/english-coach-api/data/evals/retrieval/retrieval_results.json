@@ -1,0 +1,29 @@
+[
+  {
+    "query": "network connectivity problems",
+    "metrics": {
+      "hit_at_k": 0.0,
+      "mrr": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  },
+  {
+    "query": "sleep tracker logs",
+    "metrics": {
+      "hit_at_k": 0.0,
+      "mrr": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  },
+  {
+    "query": "Hindi wellness safety alerts",
+    "metrics": {
+      "hit_at_k": 0.0,
+      "mrr": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "total_cases": 12,
+  "passed_cases": 6,
+  "failed_cases": 6,
+  "pass_rate": 0.5,
+  "average_weighted_score": 0.7468,
+  "dimension_averages": {
+    "ambiguity_handling": 1.0,
+    "tone_match": 0.85,
+    "meaning_preservation": 0.494,
+    "grammar_accuracy": 0.7083,
+    "naturalness": 0.75,
+    "explanation_quality": 0.9167
+  },
+  "run_timestamp": "2026-07-12T06:54:41.854096"
+}

@@ -1,0 +1,3 @@
+{"query": "network connectivity problems", "ground_truth_terms": ["network", "unable to join"]}
+{"query": "sleep tracker logs", "ground_truth_terms": ["sleep", "habits"]}
+{"query": "Hindi wellness safety alerts", "ground_truth_terms": ["wellness", "safety"]}

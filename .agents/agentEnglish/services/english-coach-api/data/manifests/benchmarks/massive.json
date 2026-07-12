@@ -1,0 +1,11 @@
+{
+  "dataset_name": "massive",
+  "source_url": "https://huggingface.co/datasets/qanastek/MASSIVE",
+  "split": "test",
+  "language": "en",
+  "license": "CC BY 4.0",
+  "intended_use": "Intent classification and slot filling benchmark",
+  "commercial_restriction": false,
+  "ingestion_version": "v8.0",
+  "max_examples": 1000
+}

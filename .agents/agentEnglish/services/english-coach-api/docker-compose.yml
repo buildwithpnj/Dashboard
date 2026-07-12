@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7.0-alpine
+    container_name: warborn-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: warborn-web
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+    restart: always
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: warborn-worker
+    command: celery -A app.tasks.celery_app worker --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+    restart: always
+
+volumes:
+  redis_data:

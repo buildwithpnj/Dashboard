@@ -1,0 +1,242 @@
+[
+  {
+    "case_id": "trans_01",
+    "input_text": "kal client ko update dena hai",
+    "detected_style": "Hinglish",
+    "detected_intent": "translate",
+    "actual_ambiguity": false,
+    "natural_english": "We need to update the client tomorrow.",
+    "professional_english": "We are scheduled to provide an update to the client tomorrow.",
+    "explanation": "Translated 'kal' to 'tomorrow' and 'client ko update dena hai' to 'we need to update the client' or 'provide an update'.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 1.0,
+      "meaning_preservation": 1.0,
+      "grammar_accuracy": 1.0,
+      "naturalness": 1.0,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 1.0,
+    "passed": true
+  },
+  {
+    "case_id": "trans_02",
+    "input_text": "mujhe kal chutti chahiye",
+    "detected_style": "English",
+    "detected_intent": "correct",
+    "actual_ambiguity": false,
+    "natural_english": "I am working on this task.",
+    "professional_english": "I am currently working on this task.",
+    "explanation": "Refined for natural professional context.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 0.4,
+      "meaning_preservation": 0.08116883116883117,
+      "grammar_accuracy": 0.5,
+      "naturalness": 0.5,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 0.5053,
+    "passed": false
+  },
+  {
+    "case_id": "trans_03",
+    "input_text": "\u0915\u094d\u092f\u093e \u0906\u092a \u092e\u0947\u0930\u0940 \u092e\u0926\u0926 \u0915\u0930 \u0938\u0915\u0924\u0947 \u0939\u0948\u0902",
+    "detected_style": "English",
+    "detected_intent": "correct",
+    "actual_ambiguity": false,
+    "natural_english": "I am working on this task.",
+    "professional_english": "I am currently working on this task.",
+    "explanation": "Refined for natural professional context.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 0.4,
+      "meaning_preservation": 0.038461538461538464,
+      "grammar_accuracy": 0.5,
+      "naturalness": 0.5,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 0.4946,
+    "passed": false
+  },
+  {
+    "case_id": "corr_01",
+    "input_text": "i am not able to join because network issue tha",
+    "detected_style": "Mixed",
+    "detected_intent": "correct",
+    "actual_ambiguity": false,
+    "natural_english": "I wasn't able to join because of a network issue.",
+    "professional_english": "I was unable to join the meeting due to network connectivity issues.",
+    "explanation": "Replaced Hinglish 'network issue tha' with 'due to a network issue' or 'because of a network issue' to make the sentence clean and natural.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 1.0,
+      "meaning_preservation": 1.0,
+      "grammar_accuracy": 1.0,
+      "naturalness": 1.0,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 1.0,
+    "passed": true
+  },
+  {
+    "case_id": "corr_02",
+    "input_text": "he do not understand the requirements",
+    "detected_style": "English",
+    "detected_intent": "correct",
+    "actual_ambiguity": false,
+    "natural_english": "I am working on this task.",
+    "professional_english": "I am currently working on this task.",
+    "explanation": "Refined for natural professional context.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 1.0,
+      "meaning_preservation": 0.0,
+      "grammar_accuracy": 0.5,
+      "naturalness": 0.5,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 0.575,
+    "passed": false
+  },
+  {
+    "case_id": "corr_03",
+    "input_text": "we discuss about client feedback yesterday",
+    "detected_style": "English",
+    "detected_intent": "correct",
+    "actual_ambiguity": false,
+    "natural_english": "I am working on this task.",
+    "professional_english": "I am currently working on this task.",
+    "explanation": "Refined for natural professional context.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 1.0,
+      "meaning_preservation": 0.0,
+      "grammar_accuracy": 0.5,
+      "naturalness": 0.5,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 0.575,
+    "passed": false
+  },
+  {
+    "case_id": "rew_01",
+    "input_text": "please rewrite this professionally: I will not come today because sick",
+    "detected_style": "English",
+    "detected_intent": "rewrite_professional",
+    "actual_ambiguity": false,
+    "natural_english": "Please rewrite this professionally.",
+    "professional_english": "Could you please revise this to sound more professional?",
+    "explanation": "Refined the sentence structures for proper business tone.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 1.0,
+      "meaning_preservation": 0.06818181818181818,
+      "grammar_accuracy": 0.5,
+      "naturalness": 0.5,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 0.592,
+    "passed": false
+  },
+  {
+    "case_id": "rew_02",
+    "input_text": "rewrite this casually: We are writing to notify you that the task is finished",
+    "detected_style": "English",
+    "detected_intent": "rewrite_professional",
+    "actual_ambiguity": false,
+    "natural_english": "Please rewrite this professionally.",
+    "professional_english": "Could you please revise this to sound more professional?",
+    "explanation": "Refined the sentence structures for proper business tone.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 0.4,
+      "meaning_preservation": 0.05263157894736842,
+      "grammar_accuracy": 0.5,
+      "naturalness": 0.5,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 0.4982,
+    "passed": false
+  },
+  {
+    "case_id": "rew_03",
+    "input_text": "please rewrite this professionally",
+    "detected_style": "English",
+    "detected_intent": "rewrite_professional",
+    "actual_ambiguity": false,
+    "natural_english": "Please rewrite this professionally.",
+    "professional_english": "Could you please revise this to sound more professional?",
+    "explanation": "Refined the sentence structures for proper business tone.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 1.0,
+      "meaning_preservation": 0.6875,
+      "grammar_accuracy": 0.5,
+      "naturalness": 1.0,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 0.8219,
+    "passed": true
+  },
+  {
+    "case_id": "amb_01",
+    "input_text": "kal usko bol dena",
+    "detected_style": "Hinglish",
+    "detected_intent": "correct",
+    "actual_ambiguity": true,
+    "natural_english": null,
+    "professional_english": null,
+    "explanation": null,
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 1.0,
+      "meaning_preservation": 1.0,
+      "grammar_accuracy": 1.0,
+      "naturalness": 1.0,
+      "explanation_quality": 1.0
+    },
+    "weighted_score": 1.0,
+    "passed": true
+  },
+  {
+    "case_id": "amb_02",
+    "input_text": "do that",
+    "detected_style": "English",
+    "detected_intent": "correct",
+    "actual_ambiguity": true,
+    "natural_english": null,
+    "professional_english": null,
+    "explanation": "Refined for natural professional context.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 1.0,
+      "meaning_preservation": 1.0,
+      "grammar_accuracy": 1.0,
+      "naturalness": 1.0,
+      "explanation_quality": 0.5
+    },
+    "weighted_score": 0.95,
+    "passed": true
+  },
+  {
+    "case_id": "amb_03",
+    "input_text": "tell him",
+    "detected_style": "English",
+    "detected_intent": "correct",
+    "actual_ambiguity": true,
+    "natural_english": null,
+    "professional_english": null,
+    "explanation": "Refined for natural professional context.",
+    "scores": {
+      "ambiguity_handling": 1.0,
+      "tone_match": 1.0,
+      "meaning_preservation": 1.0,
+      "grammar_accuracy": 1.0,
+      "naturalness": 1.0,
+      "explanation_quality": 0.5
+    },
+    "weighted_score": 0.95,
+    "passed": true
+  }
+]

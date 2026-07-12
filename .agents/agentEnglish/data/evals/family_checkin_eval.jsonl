@@ -1,0 +1,3 @@
+{"id": "fam_01", "input_text": "Main bilkul thik hoon, beta. Khana kha liya.", "expected_style": "Hindi", "expected_intent": "checkin", "target_phrases": ["ठीक"]}
+{"id": "fam_02", "input_text": "Mera pair fisal gaya aur main chhati ke bal gir gayi, dard ho raha hai.", "expected_style": "Hindi", "expected_intent": "checkin", "target_phrases": ["चिंता"]}
+{"id": "fam_03", "input_text": "Chhati me bohot tez dard hai aur saans lene me takleef hai.", "expected_style": "Hindi", "expected_intent": "checkin", "target_phrases": ["चिंता"]}

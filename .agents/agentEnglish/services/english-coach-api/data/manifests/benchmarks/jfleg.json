@@ -1,0 +1,11 @@
+{
+  "dataset_name": "jfleg",
+  "source_url": "https://huggingface.co/datasets/jhu-clsp/jfleg",
+  "split": "test",
+  "language": "en",
+  "license": "CC BY-NC-SA 4.0",
+  "intended_use": "Grammar error correction benchmark evaluation",
+  "commercial_restriction": true,
+  "ingestion_version": "v8.0",
+  "max_examples": 1000
+}
