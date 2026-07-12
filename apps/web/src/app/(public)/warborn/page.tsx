@@ -4,47 +4,9 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Shield, Sparkles, Key, Zap, CheckCircle2, ArrowRight, Brain, 
-  Settings, Activity, Cpu, Sliders, Play, Terminal, Database, Check
+  Activity, Cpu, Sliders, Play, Terminal, Database, Check
 } from 'lucide-react';
-
-const PCBBackground = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-    <svg className="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-        <filter id="glow-red" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-      </defs>
-      
-      {/* Board routing trace paths */}
-      <path d="M 50 150 L 300 150 L 350 200 L 350 400 L 500 400" stroke="rgba(16, 185, 129, 0.25)" strokeWidth="1.5" fill="none" />
-      <path d="M 900 100 L 700 100 L 650 150 L 650 600 L 500 600" stroke="rgba(239, 68, 68, 0.15)" strokeWidth="1.5" fill="none" />
-      <path d="M 100 800 L 250 800 L 300 850 L 600 850 L 650 900" stroke="rgba(16, 185, 129, 0.2)" strokeWidth="1.5" fill="none" />
-      <path d="M 950 700 L 800 700 L 750 750 L 750 950 L 600 950" stroke="rgba(16, 185, 129, 0.2)" strokeWidth="1.5" fill="none" />
-      
-      {/* Vias Junctions */}
-      <circle cx="50" cy="150" r="4" fill="rgba(16, 185, 129, 0.6)" />
-      <circle cx="500" cy="400" r="4" fill="rgba(16, 185, 129, 0.6)" />
-      <circle cx="900" cy="100" r="4" fill="rgba(239, 68, 68, 0.6)" />
-      <circle cx="500" cy="600" r="4" fill="rgba(239, 68, 68, 0.6)" />
-      <circle cx="100" cy="800" r="4" fill="rgba(16, 185, 129, 0.6)" />
-      <circle cx="650" cy="900" r="4" fill="rgba(16, 185, 129, 0.6)" />
-      
-      {/* Live Data Pulses */}
-      <circle r="3" fill="#10b981" filter="url(#glow-green)">
-        <animateMotion dur="5s" repeatCount="indefinite" path="M 50 150 L 300 150 L 350 200 L 350 400 L 500 400" />
-      </circle>
-      <circle r="3" fill="#ef4444" filter="url(#glow-red)">
-        <animateMotion dur="7s" repeatCount="indefinite" path="M 900 100 L 700 100 L 650 150 L 650 600 L 500 600" />
-      </circle>
-    </svg>
-  </div>
-);
+import { PremiumPixelBackground } from '@/components/premium-pixel-background';
 
 export default function WarbornLandingPage() {
   const [emailInput, setEmailInput] = useState('');
@@ -59,12 +21,12 @@ export default function WarbornLandingPage() {
   };
 
   return (
-    <div className="min-h-screen text-foreground relative py-12 px-6 sm:px-12 flex flex-col items-center justify-start bg-[#09090b]">
-      {/* Board traces background layer */}
-      <PCBBackground />
+    <div className="min-h-screen text-foreground relative py-12 px-6 sm:px-12 flex flex-col items-center justify-start bg-background">
+      {/* Premium Motherboard trace canvas background */}
+      <PremiumPixelBackground />
 
       {/* Hero Section */}
-      <div className="relative z-10 max-w-5xl text-center space-y-6 pt-12 pb-20">
+      <div id="hero-section-root" className="relative z-10 max-w-5xl text-center space-y-6 pt-12 pb-20">
         <span className="text-3xs font-mono font-bold uppercase tracking-[0.35em] text-primary bg-primary/5 border border-primary/20 px-3 py-1 rounded-full">
           {"COGNITIVE OPERATING KERNEL"}
         </span>
@@ -79,13 +41,13 @@ export default function WarbornLandingPage() {
         <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
           <Link
             href="/warborn/preview"
-            className="h-10 px-6 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary/90 flex items-center gap-2 transition-all shadow-lg shadow-primary/10 text-xs"
+            className="h-10 px-6 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 flex items-center gap-2 transition-all shadow-lg shadow-primary/10 text-xs"
           >
             {"Try Preview Sandbox"} <Sparkles className="h-3.5 w-3.5" />
           </Link>
           <Link
             href="/login"
-            className="h-10 px-6 rounded-xl border border-border/85 bg-card/45 hover:bg-muted/20 font-semibold flex items-center gap-2 transition-all text-xs"
+            className="h-10 px-6 rounded-xl border border-border/80 bg-background/95 dark:bg-card/95 hover:bg-muted/20 font-semibold flex items-center gap-2 transition-all text-xs"
           >
             {"Enter Dashboard"} <Key className="h-3.5 w-3.5" />
           </Link>
@@ -99,8 +61,8 @@ export default function WarbornLandingPage() {
       </div>
 
       {/* Section 2: Core Capabilities Grid */}
-      <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-border/40">
-        <div className="rounded-2xl border border-border/60 bg-card/25 p-6 space-y-4 hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-300">
+      <div id="section-mission" className="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-border/40">
+        <div className="rounded-2xl border border-border/40 bg-background/95 dark:bg-card/95 backdrop-blur-xl p-6 space-y-4 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.4)] transition-all duration-300">
           <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary">
             <Shield className="h-5 w-5" />
           </div>
@@ -110,7 +72,7 @@ export default function WarbornLandingPage() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-border/60 bg-card/25 p-6 space-y-4 hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-300">
+        <div className="rounded-2xl border border-border/40 bg-background/95 dark:bg-card/95 backdrop-blur-xl p-6 space-y-4 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.4)] transition-all duration-300">
           <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary">
             <Zap className="h-5 w-5" />
           </div>
@@ -120,7 +82,7 @@ export default function WarbornLandingPage() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-border/60 bg-card/25 p-6 space-y-4 hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-300">
+        <div className="rounded-2xl border border-border/40 bg-background/95 dark:bg-card/95 backdrop-blur-xl p-6 space-y-4 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.4)] transition-all duration-300">
           <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary">
             <Key className="h-5 w-5" />
           </div>
@@ -132,7 +94,7 @@ export default function WarbornLandingPage() {
       </div>
 
       {/* Section 3: AI Chat, memory + actions deep dive */}
-      <div className="relative z-10 w-full max-w-5xl py-16 border-t border-border/40 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div id="section-solutions" className="relative z-10 w-full max-w-5xl py-16 border-t border-border/40 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div className="space-y-6 text-left">
           <div className="h-9 w-9 rounded-lg bg-primary/15 flex items-center justify-center text-primary">
             <Brain className="h-5 w-5" />
@@ -152,14 +114,14 @@ export default function WarbornLandingPage() {
         </div>
 
         {/* Profile memory mockup card */}
-        <div className="rounded-2xl border border-border/60 bg-card/30 p-6 text-left font-mono space-y-4 shadow-xl backdrop-blur-sm">
+        <div className="rounded-2xl border border-border/40 bg-background/95 dark:bg-card/95 backdrop-blur-xl p-6 text-left font-mono space-y-4 shadow-xl">
           <div className="flex items-center justify-between border-b border-border/40 pb-3">
             <span className="text-3xs font-bold text-muted-foreground">{"USER_PROFILE_STATE"}</span>
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
           </div>
           <div className="text-3xs space-y-2 text-muted-foreground">
             <div>{"{"}</div>
-            <div className="pl-4"><span className="text-primary">{"\"tone\":"}</span> <span className="text-amber-400">{"\"professional\""}</span>,</div>
+            <div className="pl-4"><span className="text-primary">{"\"tone\":"}</span> <span className="text-amber-500">{"\"professional\""}</span>,</div>
             <div className="pl-4"><span className="text-primary">{"\"explanation_style\":"}</span> <span className="text-amber-400">{"\"rule-based\""}</span>,</div>
             <div className="pl-4"><span className="text-primary">{"\"weaknesses\":"}</span>{" ["}<span className="text-amber-400">{"\"prepositions\""}</span>, <span className="text-amber-400">{"\"tenses\""}</span>{"],"}</div>
             <div className="pl-4"><span className="text-primary">{"\"corrections_accepted\":"}</span> <span className="text-emerald-400">{"14"}</span>,</div>
@@ -170,18 +132,18 @@ export default function WarbornLandingPage() {
       </div>
 
       {/* Section 4: LifeOS & health operating layer */}
-      <div className="relative z-10 w-full max-w-5xl py-16 border-t border-border/40 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div className="rounded-2xl border border-border/60 bg-card/30 p-6 text-left space-y-4 order-last md:order-first shadow-xl backdrop-blur-sm">
+      <div id="section-projects" className="relative z-10 w-full max-w-5xl py-16 border-t border-border/40 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="rounded-2xl border border-border/40 bg-background/95 dark:bg-card/95 backdrop-blur-xl p-6 text-left space-y-4 order-last md:order-first shadow-xl">
           <div className="flex items-center gap-2 border-b border-border/40 pb-3">
             <Activity className="h-4 w-4 text-rose-500" />
             <span className="text-3xs font-mono font-bold text-muted-foreground">{"HEALTH & RELAPSE TRACKERS"}</span>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-[#121214] border border-border/40 rounded-xl p-4 text-center">
+            <div className="bg-background/95 dark:bg-[#121214] border border-border/40 rounded-xl p-4 text-center">
               <span className="text-3xs font-mono text-muted-foreground">{"CURRENT STREAK"}</span>
               <div className="text-lg font-black text-emerald-400 mt-1">{"14 Days"}</div>
             </div>
-            <div className="bg-[#121214] border border-border/40 rounded-xl p-4 text-center">
+            <div className="bg-background/95 dark:bg-[#121214] border border-border/40 rounded-xl p-4 text-center">
               <span className="text-3xs font-mono text-muted-foreground">{"WEEKLY MILESTONE"}</span>
               <div className="text-lg font-black text-primary mt-1">{"Goal Met"}</div>
             </div>
@@ -200,7 +162,7 @@ export default function WarbornLandingPage() {
       </div>
 
       {/* Section 5: Workflow Automation Trace */}
-      <div className="relative z-10 w-full max-w-5xl py-16 border-t border-border/40 text-center space-y-8">
+      <div id="section-labs" className="relative z-10 w-full max-w-5xl py-16 border-t border-border/40 text-center space-y-8">
         <div className="max-w-2xl mx-auto space-y-4">
           <div className="h-9 w-9 rounded-lg bg-primary/15 flex items-center justify-center text-primary mx-auto">
             <Cpu className="h-5 w-5" />
@@ -211,7 +173,7 @@ export default function WarbornLandingPage() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-border/60 bg-card/25 p-6 max-w-3xl mx-auto space-y-4 text-left font-mono text-3xs text-muted-foreground shadow-xl backdrop-blur-sm">
+        <div className="rounded-2xl border border-border/40 bg-background/95 dark:bg-card/95 backdrop-blur-xl p-6 max-w-3xl mx-auto space-y-4 text-left font-mono text-3xs text-muted-foreground shadow-xl">
           <div className="flex items-center justify-between border-b border-border/40 pb-2">
             <span>{"ACTION_AUDIT_LOG"}</span>
             <span className="text-amber-400">{"PENDING_USER_APPROVAL"}</span>
@@ -225,7 +187,7 @@ export default function WarbornLandingPage() {
       </div>
 
       {/* Section 6: Action / Waitlist Form CTA */}
-      <div className="relative z-10 w-full max-w-3xl py-20 border-t border-border/40 text-center space-y-8">
+      <div id="section-journal" className="relative z-10 w-full max-w-3xl py-20 border-t border-border/40 text-center space-y-8">
         <h2 className="text-2xl font-extrabold tracking-tight">{"Join the Warborn Rollout"}</h2>
         <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
           {"Request developer credentials to obtain private system dashboard access, stateful agent sandboxes, and personalized workspace memory."}
@@ -243,11 +205,11 @@ export default function WarbornLandingPage() {
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
               placeholder="Enter your developer email..."
-              className="flex-1 h-10 px-4 rounded-xl border border-border/60 bg-card/30 text-xs focus:outline-none focus:border-primary/50 text-foreground"
+              className="flex-1 h-10 px-4 rounded-xl border border-border/40 bg-background/95 dark:bg-card/95 text-xs focus:outline-none focus:border-primary/50 text-foreground"
             />
             <button
               type="submit"
-              className="h-10 px-5 rounded-xl bg-primary hover:bg-primary/95 text-primary-foreground font-semibold text-xs transition-all"
+              className="h-10 px-5 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-semibold text-xs transition-all"
             >
               {"Request Access"}
             </button>
