@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List, Dict
 
 
 class BaseStorageProvider(ABC):
@@ -20,12 +21,12 @@ class BaseStorageProvider(ABC):
         pass
 
     @abstractmethod
-    async def list(self, folder_id: str = "root") -> list[dict]:
+    async def list(self, folder_id: str = "root") -> "List[dict]":
         """List files in the specified directory or folder."""
         pass
 
     @abstractmethod
-    async def search(self, query: str) -> list[dict]:
+    async def search(self, query: str) -> "List[dict]":
         """Search for files by matching criteria."""
         pass
 

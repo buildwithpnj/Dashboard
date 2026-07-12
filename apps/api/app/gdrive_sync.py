@@ -3,6 +3,7 @@ import io
 import json
 import logging
 from datetime import datetime
+from typing import List
 
 from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 from sqlalchemy import delete, select
@@ -107,10 +108,10 @@ async def _sync_section_to_gdrive_impl(user_id: str, section: str, db: AsyncSess
         notes = result.scalars().all()
         note_ids = [n.id for n in notes]
         
-        links = []
+        links: List[NoteLink] = []
         if note_ids:
             links_result = await db.execute(select(NoteLink).where(NoteLink.from_note_id.in_(note_ids)))
-            links = links_result.scalars().all()
+            links = list(links_result.scalars().all())
             
         data = {
             "notes": [
@@ -136,10 +137,10 @@ async def _sync_section_to_gdrive_impl(user_id: str, section: str, db: AsyncSess
         accs = accs_result.scalars().all()
         acc_ids = [a.id for a in accs]
         
-        txs = []
+        txs: List[Transaction] = []
         if acc_ids:
             txs_result = await db.execute(select(Transaction).where(Transaction.account_id.in_(acc_ids)))
-            txs = txs_result.scalars().all()
+            txs = list(txs_result.scalars().all())
             
         cats_result = await db.execute(select(Category).where(Category.user_id == user_id))
         cats = cats_result.scalars().all()
@@ -184,10 +185,8 @@ async def _sync_section_to_gdrive_impl(user_id: str, section: str, db: AsyncSess
                 {
                     "id": b.id,
                     "category_id": b.category_id,
-                    "amount": float(b.amount),
-                    "period": b.period,
-                    "year": b.year,
-                    "month": b.month
+                    "amount_limit": float(b.amount_limit),
+                    "period": b.period
                 } for b in buds
             ]
         }
@@ -196,10 +195,10 @@ async def _sync_section_to_gdrive_impl(user_id: str, section: str, db: AsyncSess
         books = books_result.scalars().all()
         book_ids = [b.id for b in books]
         
-        highlights = []
+        highlights: List[Highlight] = []
         if book_ids:
             hl_result = await db.execute(select(Highlight).where(Highlight.book_id.in_(book_ids)))
-            highlights = hl_result.scalars().all()
+            highlights = list(hl_result.scalars().all())
             
         data = {
             "books": [
@@ -232,10 +231,10 @@ async def _sync_section_to_gdrive_impl(user_id: str, section: str, db: AsyncSess
         habits = habits_result.scalars().all()
         habit_ids = [h.id for h in habits]
         
-        logs = []
+        logs: List[HabitLog] = []
         if habit_ids:
             log_result = await db.execute(select(HabitLog).where(HabitLog.habit_id.in_(habit_ids)))
-            logs = log_result.scalars().all()
+            logs = list(log_result.scalars().all())
             
         journal_result = await db.execute(select(JournalEntry).where(JournalEntry.user_id == user_id))
         journal = journal_result.scalars().all()

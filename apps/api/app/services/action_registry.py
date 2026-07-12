@@ -1,4 +1,4 @@
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 class ActionRegistry:
     # Centrally defined dictionary of safe tools metadata and schemas
@@ -50,7 +50,7 @@ class ActionRegistry:
     }
 
     @classmethod
-    def get_action(cls, action_name: str) -> Dict[str, Any]:
+    def get_action(cls, action_name: str) -> Optional[Dict[str, Any]]:
         return cls.ACTIONS.get(action_name)
 
     @classmethod

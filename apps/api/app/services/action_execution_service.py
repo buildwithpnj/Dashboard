@@ -69,7 +69,7 @@ class ActionExecutionService:
 
     @classmethod
     async def execute_log_action(cls, db: AsyncSession, log: ActionLog) -> Dict[str, Any]:
-        executors = {
+        executors: Dict[str, Any] = {
             "save_corrected_example": SaveCorrectedExampleAction,
             "create_lesson_note": CreateLessonNoteAction,
             "update_preference": UpdatePreferenceAction,

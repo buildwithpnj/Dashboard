@@ -56,8 +56,8 @@ def _seed_users(session: Session):
         print("Creating test user: test@example.com / password123")
         uid_val = str(uuid.uuid4())
         session.execute(
-            text("INSERT INTO users (id, email, password_hash) VALUES (:id, :email, :pw)"),
-            {"id": uid_val, "email": "test@example.com", "pw": ph.hash("password123")},
+            text("INSERT INTO users (id, email, password_hash, role) VALUES (:id, :email, :pw, :role)"),
+            {"id": uid_val, "email": "test@example.com", "pw": ph.hash("password123"), "role": "approved_user"},
         )
         session.flush()
         row = session.execute(
@@ -67,6 +67,7 @@ def _seed_users(session: Session):
         print("Test user created.")
     else:
         print("Test user already exists.")
+    assert row is not None
     user_id = row[0]
 
     # 2. prakashjhadps@gmail.com
@@ -78,8 +79,8 @@ def _seed_users(session: Session):
         print("Creating user: prakashjhadps@gmail.com / password123")
         uid_pj_val = str(uuid.uuid4())
         session.execute(
-            text("INSERT INTO users (id, email, password_hash) VALUES (:id, :email, :pw)"),
-            {"id": uid_pj_val, "email": "prakashjhadps@gmail.com", "pw": ph.hash("password123")},
+            text("INSERT INTO users (id, email, password_hash, role) VALUES (:id, :email, :pw, :role)"),
+            {"id": uid_pj_val, "email": "prakashjhadps@gmail.com", "pw": ph.hash("password123"), "role": "approved_user"},
         )
         session.flush()
         row_pj = session.execute(
@@ -89,6 +90,7 @@ def _seed_users(session: Session):
         print("prakashjhadps@gmail.com user created.")
     else:
         print("prakashjhadps@gmail.com user already exists.")
+    assert row_pj is not None
     user_pj_id = row_pj[0]
 
     # Seed resources for both users
@@ -169,15 +171,15 @@ def _seed_resources(session: Session, user_id: int):
             (acc_map.get("Credit Card"), -3500.00, cat_map.get("Groceries"), "Supermarket", "Weekly Groceries", now - timedelta(days=5)),
             (acc_map.get("Credit Card"), -1200.00, cat_map.get("Dining Out"), "Pizzeria", "Dinner with friends", now - timedelta(days=2)),
         ]
-        for acc_id, amount, cat_id, merchant, note, occurred_at in txns:
-            if acc_id:
+        for txn_acc_id, amount, txn_cat_id, merchant, note, occurred_at in txns:
+            if txn_acc_id:
                 txn_id = str(uuid.uuid4())
                 session.execute(
                     text(
                         "INSERT INTO transactions (id, account_id, amount, category_id, merchant, note, occurred_at, source)"
                         " VALUES (:id, :aid, :amt, :cid, :merchant, :note, :occ, 'manual')"
                     ),
-                    {"id": txn_id, "aid": acc_id, "amt": amount, "cid": cat_id, "merchant": merchant, "note": note, "occ": occurred_at},
+                    {"id": txn_id, "aid": txn_acc_id, "amt": amount, "cid": txn_cat_id, "merchant": merchant, "note": note, "occ": occurred_at},
                 )
         session.flush()
     else:

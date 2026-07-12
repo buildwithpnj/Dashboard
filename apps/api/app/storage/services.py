@@ -1,6 +1,7 @@
 import mimetypes
 import logging
 from datetime import datetime, UTC
+from typing import List, Dict, Any
 from sqlalchemy import select, update, delete as sqldelete
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -390,7 +391,7 @@ class StorageManager:
         raise FileNotFoundError(f"File ID '{file_id}' could not be resolved or deleted from any active provider.")
 
     @classmethod
-    async def list(cls, db: AsyncSession, folder_id: str = "root", provider_id: str | None = None) -> list[dict]:
+    async def list(cls, db: AsyncSession, folder_id: str = "root", provider_id: str | None = None) -> List[dict]:
         """List files in the target provider. If not specified, returns lists merged from all providers."""
         if provider_id:
             provider = await cls.get_provider(db, provider_id)
@@ -406,7 +407,7 @@ class StorageManager:
         providers = await cls.list_providers(db)
         active_providers = [p for p in providers if p.status == "active"]
         
-        merged_files = []
+        merged_files: List[dict] = []
         for provider in active_providers:
             try:
                 driver = await cls.get_driver_for_provider(provider)
@@ -421,7 +422,7 @@ class StorageManager:
         return merged_files
 
     @classmethod
-    async def search(cls, db: AsyncSession, query: str, provider_id: str | None = None) -> list[dict]:
+    async def search(cls, db: AsyncSession, query: str, provider_id: str | None = None) -> List[dict]:
         """Search files matching query text."""
         if provider_id:
             provider = await cls.get_provider(db, provider_id)
@@ -437,7 +438,7 @@ class StorageManager:
         providers = await cls.list_providers(db)
         active_providers = [p for p in providers if p.status == "active"]
         
-        merged_results = []
+        merged_results: List[dict] = []
         for provider in active_providers:
             try:
                 driver = await cls.get_driver_for_provider(provider)

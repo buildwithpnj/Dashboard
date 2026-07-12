@@ -17,7 +17,7 @@ class PublicResponseChecker:
         words = cleaned.split()
         if len(words) > 10:
             # Check if one word repeats more than 30% of the time
-            word_counts = {}
+            word_counts: dict[str, int] = {}
             for w in words:
                 word_counts[w] = word_counts.get(w, 0) + 1
             most_common = max(word_counts.values())

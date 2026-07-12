@@ -1,7 +1,7 @@
 import io
 import asyncio
 import logging
-from typing import Any
+from typing import Any, List, Dict
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
@@ -106,7 +106,7 @@ class GoogleDriveProvider(BaseStorageProvider):
         await asyncio.to_thread(_execute_delete)
         logger.info(f"File '{file_id}' deleted successfully (Provider: {self.account_email})")
 
-    async def list(self, folder_id: str = "root") -> list[dict]:
+    async def list(self, folder_id: str = "root") -> List[dict]:
         """List active files inside a parent folder directory."""
         service = await self._get_service()
         
@@ -124,7 +124,7 @@ class GoogleDriveProvider(BaseStorageProvider):
         files = await asyncio.to_thread(_execute_list)
         return files
 
-    async def search(self, query: str) -> list[dict]:
+    async def search(self, query: str) -> List[dict]:
         """Search active files matching name query."""
         service = await self._get_service()
         

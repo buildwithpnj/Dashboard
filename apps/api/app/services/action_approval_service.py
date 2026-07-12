@@ -31,6 +31,13 @@ class ActionApprovalService:
         log = log_res.scalar_one_or_none()
         if log:
             log.approval_status = "approved" if approve else "rejected"
+            if approve:
+                from app.services.action_execution_service import ActionExecutionService
+                await ActionExecutionService.execute_log_action(db, log)
+                return True
+            else:
+                log.status = "failed"
+                log.error_message = "Rejected by user approval decision."
             
         await db.commit()
         return True

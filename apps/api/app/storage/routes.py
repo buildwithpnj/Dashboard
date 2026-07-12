@@ -51,6 +51,8 @@ async def google_auth_callback(body: CallbackRequest, current_user: CurrentUser,
         tokens = oauth.exchange_code_for_tokens(body.code)
         refresh_token = tokens.get("refresh_token")
         email = tokens.get("email")
+        if not email:
+            raise HTTPException(status_code=400, detail="Google OAuth did not return an account email.")
 
         if not refresh_token:
             stmt = select(StorageProvider).where(StorageProvider.account_email == email)
@@ -114,6 +116,8 @@ async def google_auth_provider_b_callback(body: CallbackRequest, current_user: C
         tokens = oauth.exchange_code_for_tokens(body.code)
         refresh_token = tokens.get("refresh_token")
         email = tokens.get("email")
+        if not email:
+            raise HTTPException(status_code=400, detail="Google OAuth did not return an account email for Provider B.")
 
         if not refresh_token:
             stmt = select(StorageProvider).where(StorageProvider.account_email == email)
@@ -159,10 +163,13 @@ async def upload_file(
     """Upload a file. Auto-routes by category/default if provider is omitted, with dynamic failover."""
     try:
         content = await file.read()
+        if not file.filename:
+            raise HTTPException(status_code=400, detail="Uploaded file is missing a filename.")
+        content_type = file.content_type or "application/octet-stream"
         file_id = await StorageManager.upload(
             db=db,
             file_name=file.filename,
-            content_type=file.content_type,
+            content_type=content_type,
             data=content,
             provider_choice=provider
         )

@@ -6,7 +6,7 @@ class WarbornSessionService:
     _sessions: Dict[str, Dict[str, Any]] = {}
 
     @classmethod
-    def create_session(cls, user_id: int) -> str:
+    def create_session(cls, user_id: str) -> str:
         session_id = str(uuid.uuid4())
         cls._sessions[session_id] = {
             "session_id": session_id,

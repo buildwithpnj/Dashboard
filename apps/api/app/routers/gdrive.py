@@ -289,7 +289,8 @@ async def upload_file(
 ):
     service = await get_drive_service(current_user, db)
 
-    file_metadata = {
+    from typing import Dict, Any
+    file_metadata: Dict[str, Any] = {
         "name": file.filename,
     }
     if parent_id and parent_id != "root":
@@ -322,7 +323,8 @@ async def create_folder(
 ):
     service = await get_drive_service(current_user, db)
 
-    file_metadata = {
+    from typing import Dict, Any
+    file_metadata: Dict[str, Any] = {
         "name": body.name,
         "mimeType": "application/vnd.google-apps.folder",
     }
