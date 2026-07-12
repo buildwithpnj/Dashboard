@@ -16,6 +16,10 @@ class ChatResponse(BaseModel):
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest, current_user: CurrentUser):
+    # Enforce role entitlements gating
+    if current_user.role not in ["approved_user", "internal_admin"]:
+        raise HTTPException(status_code=403, detail="System access pending approval.")
+
     # Verify session ownership/permissions
     session = WarbornSessionService.get_session(req.session_id)
     if not session or session["user_id"] != current_user.id:

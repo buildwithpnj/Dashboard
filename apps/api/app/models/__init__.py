@@ -12,6 +12,7 @@ from app.models.recovery import Addiction, RelapseLog
 from app.models.goals import Goal
 from app.models.calendar_event import CalendarEvent
 from app.models.ai_insight import AICoachInsight
+from app.models.governance import AccessRequest, PreviewSession, SystemConfig, AdminAuditLog
 
 __all__ = [
     "Base",
@@ -41,4 +42,8 @@ __all__ = [
     "Goal",
     "CalendarEvent",
     "AICoachInsight",
+    "AccessRequest",
+    "PreviewSession",
+    "SystemConfig",
+    "AdminAuditLog",
 ]
