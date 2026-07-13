@@ -1,0 +1,20 @@
+{
+  "test_cases": [
+    {
+      "id": "ACT-001",
+      "payload": {
+        "title": "test",
+        "description": "Placeholder title should fail verification"
+      },
+      "expected_success": false
+    },
+    {
+      "id": "ACT-002",
+      "payload": {
+        "title": "Legitimate System Release Goal",
+        "description": "Valid content which should pass verification checks"
+      },
+      "expected_success": true
+    }
+  ]
+}

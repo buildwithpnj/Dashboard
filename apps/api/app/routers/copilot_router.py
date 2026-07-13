@@ -22,7 +22,9 @@ async def submit_copilot_query(
     sess = await CopilotSessionService.get_or_create_session(db, current_user.id)
     
     # Process route & query
-    reply_text, action = CopilotRouterService.process_query(query, ctx)
+    reply_text, action = await CopilotRouterService.process_query(
+        db, query, ctx, current_user.id, sess.chat_history
+    )
     
     # Save history
     await CopilotSessionService.append_message(db, sess, "user", query)
@@ -54,7 +56,9 @@ async def submit_voice_stream(
     sess = await CopilotSessionService.get_or_create_session(db, current_user.id)
     
     transcription = VoiceSessionService.transcribe_audio_chunk(b"")
-    reply_text, action = CopilotRouterService.process_query(transcription, ctx)
+    reply_text, action = await CopilotRouterService.process_query(
+        db, transcription, ctx, current_user.id, sess.chat_history
+    )
     
     await CopilotSessionService.append_message(db, sess, "user", transcription)
     await CopilotSessionService.append_message(db, sess, "assistant", reply_text, action)

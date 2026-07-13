@@ -1,0 +1,14 @@
+{
+  "test_cases": [
+    {
+      "id": "MEM-001",
+      "query": "Who am I and what tone do we use?",
+      "expected_context_keys": ["tone", "name"]
+    },
+    {
+      "id": "MEM-002",
+      "query": "Let's practice clear emails",
+      "expected_context_keys": ["goals", "weaknesses"]
+    }
+  ]
+}

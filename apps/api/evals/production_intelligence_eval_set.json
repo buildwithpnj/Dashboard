@@ -1,0 +1,14 @@
+{
+  "test_cases": [
+    {
+      "id": "PROD-001",
+      "anomaly_type": "loop_repeat_warning",
+      "expected_success": true
+    },
+    {
+      "id": "PROD-002",
+      "anomaly_type": "latency_spike_critical",
+      "expected_success": true
+    }
+  ]
+}

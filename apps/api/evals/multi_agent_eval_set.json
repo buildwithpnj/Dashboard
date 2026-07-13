@@ -1,0 +1,14 @@
+{
+  "test_cases": [
+    {
+      "id": "AGT-001",
+      "query": "add task for release goals",
+      "expected_agent_sequence": ["retrieval", "action"]
+    },
+    {
+      "id": "AGT-002",
+      "query": "explain my active habits",
+      "expected_agent_sequence": ["retrieval", "critic"]
+    }
+  ]
+}
