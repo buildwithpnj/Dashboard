@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { api } from '@/lib/api';
 
 export interface CopilotMessage {
   role: 'user' | 'assistant';
@@ -25,30 +26,24 @@ export function useCopilotSession() {
     setMessages(prev => [...prev, userMsg]);
 
     try {
-      const response = await fetch('/api/copilot/chat?query=' + encodeURIComponent(text), {
+      const data = await api<any>('/api/copilot/chat?query=' + encodeURIComponent(text), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           current_route: pathname || '/',
           visible_module_hints: [],
           selected_entity_id: null,
           workflow_state: null
-        })
+        }
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const assistantMsg: CopilotMessage = {
-          role: 'assistant',
-          content: data.reply,
-          suggested_action: data.suggested_action
-        };
-        setMessages(prev => [...prev, assistantMsg]);
-      } else {
-        setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error.' }]);
-      }
+      const assistantMsg: CopilotMessage = {
+        role: 'assistant',
+        content: data.reply,
+        suggested_action: data.suggested_action
+      };
+      setMessages(prev => [...prev, assistantMsg]);
     } catch (e) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Failed to communicate with Copilot.' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error.' }]);
     } finally {
       setIsSending(false);
     }
