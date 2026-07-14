@@ -193,3 +193,23 @@ With this unified Life OS architecture in place, Warborn OS is now primed for AI
 - **Autonomous Time Blocking**: The AI Coach can query habits status and automatically block rest/focus intervals in your Google Calendar.
 - **Cognitive Backups**: The journal entries can be vector-embedded locally and exported to encrypted backups in your fallback Google Drive.
 - **Relapse Trigger Avoidance**: The AI Coach can scan relapse histories to recommend lifestyle habit adjustments before trigger conditions peak.
+
+---
+
+## 8. Evolving to the V0.50 AI Control Plane & Action Registry
+
+In the latest R&D cycle (July 2026), we evolved the Life OS core from a passive data repository into an active, conversational cockpit by introducing the **V0.50 Copilot Control Plane**. 
+
+To guarantee that any state-changing operation can be reliably triggered via the Copilot drawer interface, we implemented three key mechanisms:
+
+### Unified Action Registry & Schema Contracts
+We centralized the application's action surface inside a structured registry. Every dashboard action is mapped to:
+- A strict Pydantic model (`CreateTaskInput`, `CreateHabitInput`, etc.) in [action_schema_registry.py](file:///c:/Users/praka/OneDrive/Documents/My%20dashboard/apps/api/app/services/action_schema_registry.py).
+- A corresponding policy safety tier (`safe_auto`, `confirm_first`, `destructive_confirmed`, `admin_only`) in [action_policy_registry.py](file:///c:/Users/praka/OneDrive/Documents/My%20dashboard/apps/api/app/services/action_policy_registry.py).
+
+### Smart Payload Cleansing & Synonym Mapping
+Small language models frequently output mismatched JSON parameters (e.g., using `notes` instead of `description` for a task). We built an active payload cleanser inside [copilot_router_service.py](file:///c:/Users/praka/OneDrive/Documents/My%20dashboard/apps/api/app/services/copilot_router_service.py) that intercepts LLM outputs, auto-corrects synonym keys, fills missing fields with defaults, and prunes extra parameters to pass schema validations cleanly.
+
+### Fallback Heuristic Matching
+When JSON generation fails entirely, the router falls back to regex-based heuristics to parse intent (e.g., detecting keywords like `add` + `task` or `create` + `habit` to map queries directly to their corresponding endpoints). This ensures a high-reliability conversational channel that doesn't leave the user stuck on generation failures.
+

@@ -66,6 +66,7 @@ The interface utilizes CSS-based grid lines and backdrop filters to create a flo
 ## 6. Lessons & Future Improvements
 - **Asynchronous Data Pre-fetching**: Fetching the dashboard summary payload on layout mount makes the transition from the homepage feel completely instantaneous.
 - **Future Modular Hud**: We plan to allow users to customize their cockpit by dragging, dropping, resizing, and toggling specific operational widgets dynamically.
+- **V0.50 Action-Driven Cockpit**: By introducing the Copilot action pipeline, we evolved Mission Control from a static display HUD into a bi-directional command center where routine habits can be checked, events scheduled, and recovery stats logged via conversational natural language commands.
 
 ---
 
@@ -73,3 +74,5 @@ The interface utilizes CSS-based grid lines and backdrop filters to create a flo
 - *Designing for HUDs & Science Fiction UIs*
 - *Asynchronous SQLAlchemy Query Planners*
 - *Tailwind & CSS Backdrop Filter Performances*
+- *Verified Action-to-Execution Pipeline Designs*
+
