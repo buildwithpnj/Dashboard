@@ -5,20 +5,18 @@ import {
   CheckSquare, 
   HardDrive, 
   Calendar as CalendarIcon, 
-  FileText, 
-  Cpu, 
   Activity, 
   ShieldCheck,
   Flame,
   Brain,
-  MessageSquare,
   Sparkles,
-  ArrowUpRight,
   Target,
-  Globe
+  Globe,
+  Cpu
 } from 'lucide-react';
 import Link from 'next/link';
 import { api } from '@/lib/api';
+import { cn } from '@/lib/utils';
 
 interface StorageProvider {
   provider_label: string;
@@ -204,242 +202,215 @@ export default function MissionControlPage() {
   const todayEvents = getTodayEvents();
 
   return (
-    <div className="space-y-6 animate-fade-in text-foreground">
-      {/* System Telemetry Cockpit Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between border border-border/80 rounded-2xl bg-card/45 p-6 grid-dots gap-4">
+    <div className="space-y-6 animate-fade-in text-[#E4E6EB] font-sans pb-12">
+      {/* 1. System Status Ribbon */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-[#1E2024] pb-4 gap-4">
         <div>
-          <span className="text-3xs font-bold uppercase tracking-[0.25em] text-primary">System Cockpit</span>
-          <h1 className="text-2xl font-bold tracking-tight mt-1">Mission Control</h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Operational cockpit monitoring schedules, cloud storage health, routines, and wellness insights.
-          </p>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#FFB000]">OPERATIONAL SPACE</span>
+          <h1 className="text-lg font-medium tracking-tight text-white mt-0.5">Mission Control</h1>
         </div>
 
-        {/* Telemetry readouts */}
-        <div className="flex items-center gap-6 text-xs font-mono">
+        <div className="flex items-center gap-6 text-[11px] font-mono text-[#60646C]">
           {geo && (
-            <>
-              <div className="hidden md:flex flex-col text-right">
-                <span className="text-3xs uppercase text-muted-foreground tracking-wider">Regional Node</span>
-                <span className="text-sm font-semibold text-primary flex items-center gap-1.5 justify-end">
-                  <Globe className="h-3.5 w-3.5 text-primary" />
-                  <span>{geo.country_code} Node</span>
-                </span>
-              </div>
-              <div className="h-8 w-px bg-border hidden md:block" />
-            </>
+            <span className="flex items-center gap-1.5">
+              <Globe className="h-3.5 w-3.5 text-[#FFB000]" />
+              <span>{geo.country_code} Node</span>
+            </span>
           )}
-          <div className="hidden sm:flex flex-col text-right">
-            <span className="text-3xs uppercase text-muted-foreground tracking-wider">System Clock</span>
-            <span className="text-sm font-semibold tabular-nums text-foreground">{time || '--:--:--'}</span>
-          </div>
-          <div className="h-8 w-px bg-border hidden sm:block" />
-          <div className="flex flex-col">
-            <span className="text-3xs uppercase text-muted-foreground tracking-wider">Kernel Latency</span>
-            <span className="text-sm font-semibold text-emerald-400 flex items-center gap-1">
-              <Activity className="h-3.5 w-3.5 text-emerald-400 animate-pulse" /> 14 ms
-            </span>
-          </div>
-          <div className="h-8 w-px bg-border" />
-          <div className="flex flex-col">
-            <span className="text-3xs uppercase text-muted-foreground tracking-wider">Secure Cryptography</span>
-            <span className="text-sm font-semibold text-sky-400 flex items-center gap-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-sky-400" /> AES-256
-            </span>
+          <span className="h-3 w-px bg-[#1E2024]" />
+          <span className="tabular-nums text-[#E4E6EB]">{time || '--:--:--'}</span>
+          <span className="h-3 w-px bg-[#1E2024]" />
+          <span className="flex items-center gap-1 text-[#00E676]">
+            <Activity className="h-3 w-3 animate-pulse" /> 14 ms
+          </span>
+          <span className="h-3 w-px bg-[#1E2024]" />
+          <span className="flex items-center gap-1 text-sky-400">
+            <ShieldCheck className="h-3 w-3" /> AES-256
+          </span>
+        </div>
+      </div>
+
+      {/* 2. Cognitive Hero Block */}
+      <div className="bg-[#16191D] rounded-lg p-6 border border-[#1E2024]/40 flex flex-col md:flex-row gap-6 shadow-xl">
+        <div className="flex-1 space-y-2">
+          <span className="text-[10px] font-mono tracking-wider uppercase text-[#FFB000]">AI Coach Context</span>
+          {loading ? (
+            <div className="text-xs text-[#60646C] flex items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 animate-spin text-[#FFB000]" /> Analyzing workspace state...
+            </div>
+          ) : insight ? (
+            <p className="text-sm font-normal text-white leading-relaxed font-mono">
+              "{insight.content}"
+            </p>
+          ) : (
+            <p className="text-xs text-[#60646C]">No active coaching context.</p>
+          )}
+        </div>
+        
+        <div className="w-full md:w-80 border-t md:border-t-0 md:border-l border-[#1E2024]/60 pt-4 md:pt-0 md:pl-6 space-y-3">
+          <span className="text-[10px] font-mono tracking-wider uppercase text-[#60646C]">Today's Focus priorities</span>
+          <div className="space-y-2">
+            {loading ? (
+              <p className="text-xs text-[#60646C] italic">Checking priorities...</p>
+            ) : todayEvents.length === 0 ? (
+              <p className="text-xs text-[#60646C] italic">No scheduled events to prioritize.</p>
+            ) : (
+              todayEvents.map((evt) => (
+                <div key={evt.id} className="flex items-start gap-2.5 text-xs text-neutral-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFB000] mt-1.5 shrink-0" />
+                  <span className="truncate">{evt.title}</span>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
 
-      {/* Main Grid dashboard layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-        {/* Today's Habits Checklist */}
-        <div className="rounded-2xl border border-border bg-card/30 p-5 space-y-4">
-          <div className="flex justify-between items-center pb-2 border-b border-border/40">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <Target className="h-4 w-4 text-primary" />
-              Today&apos;s Habits
+      {/* 3. Daily Execution & Behavioral health Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        {/* Daily Timeline (60%) */}
+        <div className="lg:col-span-3 bg-[#111315] rounded-lg p-5 border border-[#1E2024] space-y-4">
+          <div className="flex justify-between items-center pb-2 border-b border-[#1E2024]/65">
+            <h2 className="text-xs font-mono tracking-wider uppercase text-[#60646C] flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4 text-[#FFB000]" />
+              Schedule & Timeline
             </h2>
-            <Link href="/habits" className="text-3xs text-primary hover:underline font-mono">MANAGE</Link>
+            <Link href="/calendar" className="text-[10px] font-mono text-[#FFB000] hover:underline">SYNC</Link>
           </div>
 
-          <div className="space-y-2 text-xs">
+          <div className="space-y-2.5 text-xs">
             {loading ? (
-              <p className="text-3xs text-muted-foreground italic">Auditing habits status...</p>
-            ) : habits.length === 0 ? (
-              <p className="text-3xs text-muted-foreground italic">No active habits logged.</p>
+              <p className="text-xs text-[#60646C] italic">Updating schedule...</p>
+            ) : events.length === 0 ? (
+              <p className="text-xs text-[#60646C] italic font-mono">No events scheduled.</p>
             ) : (
-              habits.map((h) => {
-                const todayStr = new Date().toISOString().split('T')[0];
-                const checked = h.logs?.some((l) => l.date === todayStr);
-
-                return (
-                  <button
-                    key={h.id}
-                    onClick={() => toggleHabitLog(h)}
-                    className="w-full flex items-center gap-3 p-2.5 rounded-xl border border-border bg-muted/20 text-left hover:border-primary/20 transition-all"
-                  >
-                    <CheckSquare className={`h-4.5 w-4.5 transition-colors ${checked ? 'text-primary' : 'text-muted-foreground'}`} />
-                    <span className={`truncate font-medium ${checked ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
-                      {h.name}
-                    </span>
-                  </button>
-                );
-              })
-            )}
-          </div>
-        </div>
-
-        {/* Google Calendar schedule */}
-        <div className="rounded-2xl border border-border bg-card/30 p-5 space-y-4">
-          <div className="flex justify-between items-center pb-2 border-b border-border/40">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <CalendarIcon className="h-4 w-4 text-primary" />
-              Schedule Timelines
-            </h2>
-            <Link href="/calendar" className="text-3xs text-primary hover:underline font-mono">SYNC</Link>
-          </div>
-
-          <div className="space-y-2.5 text-xs font-mono">
-            {loading ? (
-              <p className="text-3xs text-muted-foreground italic">Checking calendar schedules...</p>
-            ) : todayEvents.length === 0 ? (
-              <p className="text-3xs text-muted-foreground italic">No events scheduled today.</p>
-            ) : (
-              todayEvents.map((evt) => (
-                <div key={evt.id} className="p-3 rounded-xl border border-border/60 bg-muted/25">
-                  <span className="text-[10px] text-primary font-bold">
-                    {new Date(evt.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              events.map((evt) => (
+                <div key={evt.id} className="p-3 rounded border border-[#1E2024]/80 bg-[#0B0C0E]/50 flex justify-between items-center">
+                  <span className="font-medium text-white truncate">{evt.title}</span>
+                  <span className="text-[10px] font-mono text-[#FFB000] shrink-0 ml-4">
+                    {new Date(evt.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
                   </span>
-                  <h4 className="font-semibold text-foreground mt-1 truncate">{evt.title}</h4>
                 </div>
               ))
             )}
           </div>
         </div>
 
-        {/* Addiction recovery tracker streaks */}
-        <div className="rounded-2xl border border-border bg-card/30 p-5 space-y-4">
-          <div className="flex justify-between items-center pb-2 border-b border-border/40">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <Flame className="h-4 w-4 text-primary animate-pulse" />
-              Recovery Streaks
+        {/* Behavioral Progress Module (40%) */}
+        <div className="lg:col-span-2 bg-[#111315] rounded-lg p-5 border border-[#1E2024] space-y-4">
+          <div className="flex justify-between items-center pb-2 border-b border-[#1E2024]/65">
+            <h2 className="text-xs font-mono tracking-wider uppercase text-[#60646C] flex items-center gap-2">
+              <Target className="h-4 w-4 text-[#FFB000]" />
+              Behavioral Streaks
             </h2>
-            <Link href="/recovery" className="text-3xs text-primary hover:underline font-mono">MANAGE</Link>
+            <Link href="/habits" className="text-[10px] font-mono text-[#FFB000] hover:underline">MANAGE</Link>
           </div>
 
           <div className="space-y-3">
-            {loading ? (
-              <p className="text-3xs text-muted-foreground italic">Fetching recovery stats...</p>
-            ) : addictions.length === 0 ? (
-              <p className="text-3xs text-muted-foreground italic">No addiction tracks active.</p>
-            ) : (
-              addictions.map((add) => (
-                <div key={add.id} className="p-3.5 rounded-xl border border-border/60 bg-muted/20 flex justify-between items-center text-xs font-semibold">
-                  <div className="min-w-0">
-                    <span className="block truncate">{add.name}</span>
-                    <span className="text-3xs text-muted-foreground font-mono">
-                      Saved: {currencySymbols[geo?.currency || 'USD'] || '$'}{add.money_saved || 0}
-                    </span>
-                  </div>
-                  <span className="text-primary font-mono text-sm font-bold ml-2 shrink-0">{add.current_streak_days}d</span>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* AI Coach Assistant summary advice */}
-        <div className="rounded-2xl border border-border bg-card/30 p-5 space-y-4 lg:col-span-2">
-          <div className="flex justify-between items-center pb-2 border-b border-border/40">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <Brain className="h-4 w-4 text-primary" />
-              AI Coach Insights
-            </h2>
-            <Link href="/ai-coach" className="text-3xs text-primary hover:underline font-mono">TALK TO COACH</Link>
-          </div>
-
-          {loading ? (
-            <div className="py-4 text-center text-xs text-muted-foreground flex items-center gap-2">
-              <Sparkles className="h-4.5 w-4.5 text-primary animate-spin" /> Auditing database summaries...
-            </div>
-          ) : insight ? (
-            <p className="text-xs text-muted-foreground font-mono leading-relaxed bg-card/50 p-4 border border-border/60 rounded-xl">
-              &quot;{insight.content}&quot;
-            </p>
-          ) : (
-            <p className="text-xs text-muted-foreground">No coaching logs found.</p>
-          )}
-        </div>
-
-        {/* Cloud storage provider health */}
-        <div className="rounded-2xl border border-border bg-card/30 p-5 space-y-4">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 pb-2 border-b border-border/40">
-            <HardDrive className="h-4 w-4 text-primary" />
-            Storage Health
-          </h2>
-          <div className="space-y-3">
-            {loading ? (
-              <p className="text-3xs text-muted-foreground italic">Loading active nodes...</p>
-            ) : (
-              providers.map((p, idx) => (
-                <div key={idx} className="p-3 rounded-xl border border-border/60 bg-muted/20 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-foreground">Drive {p.provider_label}</span>
-                    <span className={`rounded-full px-2 py-0.5 text-3xs font-semibold ${
-                      p.connected ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-muted text-muted-foreground border border-border'
-                    }`}>
-                      {p.connected ? 'ONLINE' : 'OFFLINE'}
-                    </span>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Cognitive Kernel & Personalization Memory */}
-        <div className="rounded-2xl border border-border bg-card/30 p-5 space-y-4">
-          <div className="flex justify-between items-center pb-2 border-b border-border/40">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <Brain className="h-4 w-4 text-primary" />
-              Cognitive Kernel Memory
-            </h2>
-            <Link href="/ai-memory" className="text-3xs text-primary hover:underline font-mono">EDIT MEMORY</Link>
-          </div>
-
-          <div className="space-y-3 font-mono text-xs">
-            {loading ? (
-              <p className="text-3xs text-muted-foreground italic">Syncing personalization memory...</p>
-            ) : !memoryProgress ? (
-              <p className="text-3xs text-muted-foreground italic">No personalization logs loaded.</p>
-            ) : (
-              <div className="space-y-2.5">
-                <div className="flex justify-between items-center bg-muted/20 border border-border/60 rounded-xl p-2.5">
-                  <span className="text-3xs text-muted-foreground uppercase">Accepted Corrections</span>
-                  <span className="text-emerald-400 font-bold">{memoryProgress.corrections_accepted}</span>
-                </div>
-                <div className="flex justify-between items-center bg-muted/20 border border-border/60 rounded-xl p-2.5">
-                  <span className="text-3xs text-muted-foreground uppercase">Grammar Streak</span>
-                  <span className="text-primary font-bold">{memoryProgress.streak} Days</span>
-                </div>
-                {memoryProgress.weak_categories.length > 0 && (
-                  <div className="bg-muted/15 border border-border/40 rounded-xl p-3 text-[10px] space-y-1">
-                    <span className="block text-3xs text-muted-foreground uppercase font-bold">Active Focus Categories:</span>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {memoryProgress.weak_categories.slice(0, 3).map((w, idx) => (
-                        <span key={idx} className="bg-primary/10 border border-primary/20 text-primary px-1.5 py-0.5 rounded text-[9px]">
-                          {w}
-                        </span>
-                      ))}
+            {/* Sobriety Streaks Section */}
+            <div className="space-y-2">
+              {loading ? (
+                <p className="text-xs text-[#60646C] italic">Reading recovery node...</p>
+              ) : addictions.length === 0 ? (
+                <p className="text-xs text-[#60646C] italic">No active addiction tracking.</p>
+              ) : (
+                addictions.map((add) => (
+                  <div key={add.id} className="p-3 rounded border border-[#1E2024]/60 bg-[#0B0C0E]/40 flex justify-between items-center text-xs">
+                    <div className="min-w-0">
+                      <span className="block truncate text-white font-medium">{add.name}</span>
+                      <span className="text-[10px] font-mono text-[#60646C]">
+                        Saved: {currencySymbols[geo?.currency || 'USD'] || '$'}{add.money_saved || 0}
+                      </span>
                     </div>
+                    <span className="text-[#FFB000] font-mono font-bold text-sm ml-2 shrink-0 flex items-center gap-1">
+                      <Flame className="h-3.5 w-3.5 text-[#FFB000]" /> {add.current_streak_days}d
+                    </span>
                   </div>
+                ))
+              )}
+            </div>
+
+            {/* Quick Habit Action Bar */}
+            <div className="border-t border-[#1E2024]/60 pt-3 space-y-2">
+              <span className="text-[9px] font-mono tracking-wider uppercase text-[#60646C] block">Routine Checkins</span>
+              <div className="grid grid-cols-2 gap-2 text-[11px]">
+                {loading ? (
+                  <p className="text-xs text-[#60646C] col-span-2 italic">Loading habits...</p>
+                ) : habits.length === 0 ? (
+                  <p className="text-xs text-[#60646C] col-span-2 italic">No routine habits configured.</p>
+                ) : (
+                  habits.slice(0, 2).map((h) => {
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    const checked = h.logs?.some((l) => l.date === todayStr);
+                    return (
+                      <button
+                        key={h.id}
+                        onClick={() => toggleHabitLog(h)}
+                        className={cn(
+                          "flex items-center gap-2 p-2 rounded border transition-colors text-left truncate font-medium",
+                          checked 
+                            ? "bg-[#16191D] border-[#FFB000]/40 text-[#E4E6EB] line-through decoration-[#FFB000]/40" 
+                            : "bg-[#0B0C0E]/30 border-[#1E2024] text-[#60646C] hover:border-[#1E2024]"
+                        )}
+                      >
+                        <CheckSquare className={cn("h-3.5 w-3.5 shrink-0", checked ? "text-[#FFB000]" : "text-[#60646C]")} />
+                        <span className="truncate">{h.name}</span>
+                      </button>
+                    );
+                  })
                 )}
               </div>
-            )}
+            </div>
           </div>
         </div>
+      </div>
 
+      {/* 4. System Health & Memory Telemetry Strip */}
+      <div className="bg-[#111315] rounded-lg p-5 border border-[#1E2024] space-y-4">
+        <div className="flex justify-between items-center pb-2 border-b border-[#1E2024]/65">
+          <h2 className="text-xs font-mono tracking-wider uppercase text-[#60646C] flex items-center gap-2">
+            <Cpu className="h-4 w-4 text-[#FFB000]" />
+            Telemetry & Cognitive Memory
+          </h2>
+          <Link href="/storage" className="text-[10px] font-mono text-[#FFB000] hover:underline">DRIVES</Link>
+        </div>
+
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 text-xs font-mono">
+          {/* Storage nodes */}
+          <div className="flex-1 flex flex-wrap gap-3">
+            {loading ? (
+              <p className="text-xs text-[#60646C] italic">Polling drives...</p>
+            ) : providers.length === 0 ? (
+              <p className="text-xs text-[#60646C] italic">No active storage nodes connected.</p>
+            ) : (
+              providers.map((p, idx) => (
+                <div key={idx} className="px-3 py-2 rounded border border-[#1E2024]/80 bg-[#0B0C0E]/40 flex items-center gap-2">
+                  <HardDrive className="h-3.5 w-3.5 text-[#60646C]" />
+                  <span className="text-[#E4E6EB] font-medium">{p.provider_label}</span>
+                  <span className={cn(
+                    "w-1.5 h-1.5 rounded-full",
+                    p.connected ? "bg-[#00E676] animate-pulse" : "bg-[#60646C]"
+                  )} />
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Cognitive kernel metrics */}
+          {memoryProgress && (
+            <div className="flex items-center gap-4 bg-[#0B0C0E]/40 border border-[#1E2024]/80 rounded p-2.5 shrink-0">
+              <div className="flex flex-col text-right">
+                <span className="text-[9px] uppercase text-[#60646C]">Memory facts</span>
+                <span className="text-xs font-semibold text-[#E4E6EB]">{memoryProgress.corrections_accepted} Accepted</span>
+              </div>
+              <span className="h-6 w-px bg-[#1E2024]" />
+              <div className="flex flex-col text-right">
+                <span className="text-[9px] uppercase text-[#60646C]">Streak</span>
+                <span className="text-xs font-semibold text-[#FFB000]">{memoryProgress.streak} Days</span>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
